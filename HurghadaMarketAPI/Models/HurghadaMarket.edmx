@@ -1,0 +1,1985 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="HurghadaMarketModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Branch">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ParentBranchID" Type="int" />
+          <Property Name="BranchNameAr" Type="nvarchar" MaxLength="500" />
+          <Property Name="BranchNameEn" Type="nvarchar" MaxLength="500" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="CategoryID" Type="int" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="AddressAr" Type="nvarchar(max)" />
+          <Property Name="AddressEn" Type="nvarchar(max)" />
+          <Property Name="Longitude" Type="nvarchar" MaxLength="100" />
+          <Property Name="Latitude" Type="nvarchar" MaxLength="100" />
+          <Property Name="UserLogID" Type="bigint" />
+          <Property Name="DistanceRange" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Logo" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="BranchCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryID" Type="int" />
+          <Property Name="BranchID" Type="int" />
+          <Property Name="OrderID" Type="int" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <EntityType Name="BranchItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BranchID" Type="int" />
+          <Property Name="ItemID" Type="bigint" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="UserLogID" Type="bigint" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="OrderID" Type="int" />
+        </EntityType>
+        <EntityType Name="BranchParticipation">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BranchID" Type="int" />
+          <Property Name="StartDate" Type="date" />
+          <Property Name="EndDate" Type="date" />
+          <Property Name="PayedValue" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="UserLogID" Type="bigint" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryNameAr" Type="nvarchar" MaxLength="500" />
+          <Property Name="CategoryNameEn" Type="nvarchar" MaxLength="500" />
+          <Property Name="CategoryType" Type="nvarchar" MaxLength="50" />
+          <Property Name="ParentID" Type="int" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="OrderID" Type="int" />
+          <Property Name="Pic" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientName" Type="nvarchar" MaxLength="500" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="500" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <EntityType Name="CustomerAddress">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerID" Type="bigint" />
+          <Property Name="Address" Type="nvarchar(max)" />
+          <Property Name="Longitude" Type="nvarchar" MaxLength="100" />
+          <Property Name="Latitude" Type="nvarchar" MaxLength="100" />
+          <Property Name="Details" Type="nvarchar(max)" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <EntityType Name="CustomerFeedback">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerID" Type="bigint" />
+          <Property Name="TableName" Type="nvarchar" MaxLength="50" />
+          <Property Name="TableID" Type="bigint" />
+          <Property Name="Comment" Type="nvarchar(max)" />
+          <Property Name="Approved" Type="bit" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="CommentDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Customers">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="500" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="InvoiceItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemID" Type="bigint" />
+          <Property Name="Quantity" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Discount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="InvoiceID" Type="bigint" />
+          <Property Name="OfferID" Type="bigint" />
+        </EntityType>
+        <EntityType Name="Invoices">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InvoiceCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="CustomerID" Type="bigint" />
+          <Property Name="RequestDate" Type="date" />
+          <Property Name="RequestTime" Type="time" Precision="7" />
+          <Property Name="TotalPrice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Discount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Tax" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="UserLogID" Type="bigint" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="Served" Type="bit" />
+          <Property Name="BranchID" Type="int" />
+          <Property Name="Carpet" Type="bit" />
+          <Property Name="Address" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ItemEval">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BranchItemID" Type="bigint" />
+          <Property Name="EvalDegree" Type="int" />
+        </EntityType>
+        <EntityType Name="Items">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryID" Type="int" />
+          <Property Name="ItemNameAr" Type="nvarchar" MaxLength="500" />
+          <Property Name="ItemNameEn" Type="nvarchar" MaxLength="500" />
+          <Property Name="PicURL" Type="nvarchar(max)" />
+          <Property Name="DetailsAr" Type="nvarchar(max)" />
+          <Property Name="DetailsEn" Type="nvarchar(max)" />
+          <Property Name="Divisible" Type="bit" />
+          <Property Name="UserLogID" Type="bigint" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <EntityType Name="Mail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BranchID" Type="int" />
+          <Property Name="CustomerID" Type="bigint" />
+          <Property Name="Subject" Type="nvarchar(max)" />
+          <Property Name="Message" Type="nvarchar(max)" />
+          <Property Name="Readed" Type="bit" />
+          <Property Name="SendDate" Type="datetime" />
+          <Property Name="ViewDate" Type="datetime" />
+          <Property Name="FromAdmin" Type="bit" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="Sent" Type="bit" />
+        </EntityType>
+        <EntityType Name="MarketEvaluation">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BranchID" Type="int" />
+          <Property Name="EvalDegree" Type="int" />
+          <Property Name="ClientID" Type="int" />
+          <Property Name="EvalDate" Type="date" />
+        </EntityType>
+        <EntityType Name="OfferItems">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OfferID" Type="bigint" />
+          <Property Name="ItemID" Type="bigint" />
+          <Property Name="Quantity" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <EntityType Name="Offers">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OfferNameAr" Type="nvarchar" MaxLength="500" />
+          <Property Name="OfferNameEn" Type="nvarchar" MaxLength="500" />
+          <Property Name="StartDate" Type="date" />
+          <Property Name="EndDate" Type="date" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="UserLogID" Type="bigint" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="OfferPrice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="OrPrice" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="BranchID" Type="int" />
+          <Property Name="Pic" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserPassword" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="bit" />
+          <Property Name="UserType" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsAdmin" Type="bit" />
+          <Property Name="BranchID" Type="int" />
+          <Property Name="Email" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="UserLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="LoginTime" Type="datetime" />
+          <Property Name="SafeAccount" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="ExtraCost">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ExtraTitle" Type="nvarchar" MaxLength="500" />
+          <Property Name="ExtraValue" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="UserLogID" Type="bigint" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <Association Name="FK_Branch_Branch">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1" />
+          <End Role="Branch1" Type="Self.Branch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Branch1">
+              <PropertyRef Name="ParentBranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Branch_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
+          <End Role="Branch" Type="Self.Branch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Branch">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Branch_UserLog">
+          <End Role="UserLog" Type="Self.UserLog" Multiplicity="0..1" />
+          <End Role="Branch" Type="Self.Branch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserLog">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Branch">
+              <PropertyRef Name="UserLogID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BranchCategory_Branch">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BranchCategory" Type="Self.BranchCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BranchCategory">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BranchCategory_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BranchCategory" Type="Self.BranchCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BranchCategory">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BranchItem_Branch">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BranchItem" Type="Self.BranchItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BranchItem">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BranchItem_Items">
+          <End Role="Items" Type="Self.Items" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BranchItem" Type="Self.BranchItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Items">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BranchItem">
+              <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BranchItem_UserLog">
+          <End Role="UserLog" Type="Self.UserLog" Multiplicity="0..1" />
+          <End Role="BranchItem" Type="Self.BranchItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserLog">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BranchItem">
+              <PropertyRef Name="UserLogID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BranchParticipation_Branch">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BranchParticipation" Type="Self.BranchParticipation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BranchParticipation">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BranchParticipation_UserLog">
+          <End Role="UserLog" Type="Self.UserLog" Multiplicity="0..1" />
+          <End Role="BranchParticipation" Type="Self.BranchParticipation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserLog">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BranchParticipation">
+              <PropertyRef Name="UserLogID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CustomerAddress_Customers">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CustomerAddress" Type="Self.CustomerAddress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CustomerAddress">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CustomerFeedback_Customers">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CustomerFeedback" Type="Self.CustomerFeedback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CustomerFeedback">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvoiceItem_Invoices">
+          <End Role="Invoices" Type="Self.Invoices" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="InvoiceItem" Type="Self.InvoiceItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Invoices">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="InvoiceItem">
+              <PropertyRef Name="InvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvoiceItem_Items">
+          <End Role="Items" Type="Self.Items" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="InvoiceItem" Type="Self.InvoiceItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Items">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="InvoiceItem">
+              <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvoiceItem_Offers">
+          <End Role="Offers" Type="Self.Offers" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="InvoiceItem" Type="Self.InvoiceItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Offers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="InvoiceItem">
+              <PropertyRef Name="OfferID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoices_Branch">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1" />
+          <End Role="Invoices" Type="Self.Invoices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Invoices">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoices_Customers">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Invoices" Type="Self.Invoices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Invoices">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoices_UserLog">
+          <End Role="UserLog" Type="Self.UserLog" Multiplicity="0..1" />
+          <End Role="Invoices" Type="Self.Invoices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserLog">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Invoices">
+              <PropertyRef Name="UserLogID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ItemEval_BranchItem">
+          <End Role="BranchItem" Type="Self.BranchItem" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ItemEval" Type="Self.ItemEval" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BranchItem">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ItemEval">
+              <PropertyRef Name="BranchItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Items_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Items" Type="Self.Items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Items">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Items_UserLog">
+          <End Role="UserLog" Type="Self.UserLog" Multiplicity="0..1" />
+          <End Role="Items" Type="Self.Items" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserLog">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Items">
+              <PropertyRef Name="UserLogID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Mail_Branch">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Mail" Type="Self.Mail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Mail">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Mail_Customers">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
+          <End Role="Mail" Type="Self.Mail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Mail">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MarketEvaluation_Branch">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="MarketEvaluation" Type="Self.MarketEvaluation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MarketEvaluation">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MarketEvaluation_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="0..1" />
+          <End Role="MarketEvaluation" Type="Self.MarketEvaluation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MarketEvaluation">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OfferItems_Items">
+          <End Role="Items" Type="Self.Items" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OfferItems" Type="Self.OfferItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Items">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OfferItems">
+              <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OfferItems_Offers">
+          <End Role="Offers" Type="Self.Offers" Multiplicity="0..1" />
+          <End Role="OfferItems" Type="Self.OfferItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Offers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OfferItems">
+              <PropertyRef Name="OfferID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Offers_Offers">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Offers" Type="Self.Offers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Offers">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Offers_UserLog">
+          <End Role="UserLog" Type="Self.UserLog" Multiplicity="0..1" />
+          <End Role="Offers" Type="Self.Offers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserLog">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Offers">
+              <PropertyRef Name="UserLogID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Branch">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserLog_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="UserLog" Type="Self.UserLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserLog">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HurghadaMarketModelStoreContainer">
+          <EntitySet Name="Branch" EntityType="Self.Branch" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BranchCategory" EntityType="Self.BranchCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BranchItem" EntityType="Self.BranchItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BranchParticipation" EntityType="Self.BranchParticipation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerAddress" EntityType="Self.CustomerAddress" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerFeedback" EntityType="Self.CustomerFeedback" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InvoiceItem" EntityType="Self.InvoiceItem" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Invoices" EntityType="Self.Invoices" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ItemEval" EntityType="Self.ItemEval" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Items" EntityType="Self.Items" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Mail" EntityType="Self.Mail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MarketEvaluation" EntityType="Self.MarketEvaluation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OfferItems" EntityType="Self.OfferItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Offers" EntityType="Self.Offers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserLog" EntityType="Self.UserLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExtraCost" EntityType="Self.ExtraCost" Schema="ph18669459826" store:Type="Tables" />
+          <AssociationSet Name="FK_Branch_Branch" Association="Self.FK_Branch_Branch">
+            <End Role="Branch" EntitySet="Branch" />
+            <End Role="Branch1" EntitySet="Branch" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Branch_Category" Association="Self.FK_Branch_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Branch" EntitySet="Branch" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Branch_UserLog" Association="Self.FK_Branch_UserLog">
+            <End Role="UserLog" EntitySet="UserLog" />
+            <End Role="Branch" EntitySet="Branch" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BranchCategory_Branch" Association="Self.FK_BranchCategory_Branch">
+            <End Role="Branch" EntitySet="Branch" />
+            <End Role="BranchCategory" EntitySet="BranchCategory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BranchCategory_Category" Association="Self.FK_BranchCategory_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="BranchCategory" EntitySet="BranchCategory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BranchItem_Branch" Association="Self.FK_BranchItem_Branch">
+            <End Role="Branch" EntitySet="Branch" />
+            <End Role="BranchItem" EntitySet="BranchItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BranchItem_Items" Association="Self.FK_BranchItem_Items">
+            <End Role="Items" EntitySet="Items" />
+            <End Role="BranchItem" EntitySet="BranchItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BranchItem_UserLog" Association="Self.FK_BranchItem_UserLog">
+            <End Role="UserLog" EntitySet="UserLog" />
+            <End Role="BranchItem" EntitySet="BranchItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BranchParticipation_Branch" Association="Self.FK_BranchParticipation_Branch">
+            <End Role="Branch" EntitySet="Branch" />
+            <End Role="BranchParticipation" EntitySet="BranchParticipation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BranchParticipation_UserLog" Association="Self.FK_BranchParticipation_UserLog">
+            <End Role="UserLog" EntitySet="UserLog" />
+            <End Role="BranchParticipation" EntitySet="BranchParticipation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CustomerAddress_Customers" Association="Self.FK_CustomerAddress_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="CustomerAddress" EntitySet="CustomerAddress" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CustomerFeedback_Customers" Association="Self.FK_CustomerFeedback_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="CustomerFeedback" EntitySet="CustomerFeedback" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvoiceItem_Invoices" Association="Self.FK_InvoiceItem_Invoices">
+            <End Role="Invoices" EntitySet="Invoices" />
+            <End Role="InvoiceItem" EntitySet="InvoiceItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvoiceItem_Items" Association="Self.FK_InvoiceItem_Items">
+            <End Role="Items" EntitySet="Items" />
+            <End Role="InvoiceItem" EntitySet="InvoiceItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvoiceItem_Offers" Association="Self.FK_InvoiceItem_Offers">
+            <End Role="Offers" EntitySet="Offers" />
+            <End Role="InvoiceItem" EntitySet="InvoiceItem" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoices_Branch" Association="Self.FK_Invoices_Branch">
+            <End Role="Branch" EntitySet="Branch" />
+            <End Role="Invoices" EntitySet="Invoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoices_Customers" Association="Self.FK_Invoices_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Invoices" EntitySet="Invoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoices_UserLog" Association="Self.FK_Invoices_UserLog">
+            <End Role="UserLog" EntitySet="UserLog" />
+            <End Role="Invoices" EntitySet="Invoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemEval_BranchItem" Association="Self.FK_ItemEval_BranchItem">
+            <End Role="BranchItem" EntitySet="BranchItem" />
+            <End Role="ItemEval" EntitySet="ItemEval" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Items_Category" Association="Self.FK_Items_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Items" EntitySet="Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Items_UserLog" Association="Self.FK_Items_UserLog">
+            <End Role="UserLog" EntitySet="UserLog" />
+            <End Role="Items" EntitySet="Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Mail_Branch" Association="Self.FK_Mail_Branch">
+            <End Role="Branch" EntitySet="Branch" />
+            <End Role="Mail" EntitySet="Mail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Mail_Customers" Association="Self.FK_Mail_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Mail" EntitySet="Mail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MarketEvaluation_Branch" Association="Self.FK_MarketEvaluation_Branch">
+            <End Role="Branch" EntitySet="Branch" />
+            <End Role="MarketEvaluation" EntitySet="MarketEvaluation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MarketEvaluation_Client" Association="Self.FK_MarketEvaluation_Client">
+            <End Role="Client" EntitySet="Client" />
+            <End Role="MarketEvaluation" EntitySet="MarketEvaluation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OfferItems_Items" Association="Self.FK_OfferItems_Items">
+            <End Role="Items" EntitySet="Items" />
+            <End Role="OfferItems" EntitySet="OfferItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OfferItems_Offers" Association="Self.FK_OfferItems_Offers">
+            <End Role="Offers" EntitySet="Offers" />
+            <End Role="OfferItems" EntitySet="OfferItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Offers_Offers" Association="Self.FK_Offers_Offers">
+            <End Role="Branch" EntitySet="Branch" />
+            <End Role="Offers" EntitySet="Offers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Offers_UserLog" Association="Self.FK_Offers_UserLog">
+            <End Role="UserLog" EntitySet="UserLog" />
+            <End Role="Offers" EntitySet="Offers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Branch" Association="Self.FK_User_Branch">
+            <End Role="Branch" EntitySet="Branch" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserLog_User" Association="Self.FK_UserLog_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserLog" EntitySet="UserLog" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HurghadaMarketModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Branch">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ParentBranchID" Type="Int32" />
+          <Property Name="BranchNameAr" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="BranchNameEn" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryID" Type="Int32" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="AddressAr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AddressEn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Longitude" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UserLogID" Type="Int64" />
+          <Property Name="DistanceRange" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Logo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Branch1" Relationship="Self.FK_Branch_Branch" FromRole="Branch" ToRole="Branch1" />
+          <NavigationProperty Name="Branch2" Relationship="Self.FK_Branch_Branch" FromRole="Branch1" ToRole="Branch" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_Branch_Category" FromRole="Branch" ToRole="Category" />
+          <NavigationProperty Name="UserLog" Relationship="Self.FK_Branch_UserLog" FromRole="Branch" ToRole="UserLog" />
+          <NavigationProperty Name="BranchCategories" Relationship="Self.FK_BranchCategory_Branch" FromRole="Branch" ToRole="BranchCategory" />
+          <NavigationProperty Name="BranchItems" Relationship="Self.FK_BranchItem_Branch" FromRole="Branch" ToRole="BranchItem" />
+          <NavigationProperty Name="BranchParticipations" Relationship="Self.FK_BranchParticipation_Branch" FromRole="Branch" ToRole="BranchParticipation" />
+          <NavigationProperty Name="Invoices" Relationship="Self.FK_Invoices_Branch" FromRole="Branch" ToRole="Invoices" />
+          <NavigationProperty Name="Mails" Relationship="Self.FK_Mail_Branch" FromRole="Branch" ToRole="Mail" />
+          <NavigationProperty Name="MarketEvaluations" Relationship="Self.FK_MarketEvaluation_Branch" FromRole="Branch" ToRole="MarketEvaluation" />
+          <NavigationProperty Name="Offers" Relationship="Self.FK_Offers_Offers" FromRole="Branch" ToRole="Offers" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_User_Branch" FromRole="Branch" ToRole="User" />
+        </EntityType>
+        <EntityType Name="BranchCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryID" Type="Int32" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="OrderID" Type="Int32" />
+          <Property Name="Status" Type="Boolean" />
+          <NavigationProperty Name="Branch" Relationship="Self.FK_BranchCategory_Branch" FromRole="BranchCategory" ToRole="Branch" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_BranchCategory_Category" FromRole="BranchCategory" ToRole="Category" />
+        </EntityType>
+        <EntityType Name="BranchItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="ItemID" Type="Int64" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UserLogID" Type="Int64" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="OrderID" Type="Int32" />
+          <NavigationProperty Name="Branch" Relationship="Self.FK_BranchItem_Branch" FromRole="BranchItem" ToRole="Branch" />
+          <NavigationProperty Name="Item" Relationship="Self.FK_BranchItem_Items" FromRole="BranchItem" ToRole="Items" />
+          <NavigationProperty Name="UserLog" Relationship="Self.FK_BranchItem_UserLog" FromRole="BranchItem" ToRole="UserLog" />
+          <NavigationProperty Name="ItemEvals" Relationship="Self.FK_ItemEval_BranchItem" FromRole="BranchItem" ToRole="ItemEval" />
+        </EntityType>
+        <EntityType Name="BranchParticipation">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Precision="0" />
+          <Property Name="PayedValue" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="UserLogID" Type="Int64" />
+          <Property Name="Status" Type="Boolean" />
+          <NavigationProperty Name="Branch" Relationship="Self.FK_BranchParticipation_Branch" FromRole="BranchParticipation" ToRole="Branch" />
+          <NavigationProperty Name="UserLog" Relationship="Self.FK_BranchParticipation_UserLog" FromRole="BranchParticipation" ToRole="UserLog" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryNameAr" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryNameEn" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ParentID" Type="Int32" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="OrderID" Type="Int32" />
+          <Property Name="Pic" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Branches" Relationship="Self.FK_Branch_Category" FromRole="Category" ToRole="Branch" />
+          <NavigationProperty Name="BranchCategories" Relationship="Self.FK_BranchCategory_Category" FromRole="Category" ToRole="BranchCategory" />
+          <NavigationProperty Name="Items" Relationship="Self.FK_Items_Category" FromRole="Category" ToRole="Items" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+          <NavigationProperty Name="MarketEvaluations" Relationship="Self.FK_MarketEvaluation_Client" FromRole="Client" ToRole="MarketEvaluation" />
+        </EntityType>
+        <EntityType Name="CustomerAddress">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerID" Type="Int64" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Longitude" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Details" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_CustomerAddress_Customers" FromRole="CustomerAddress" ToRole="Customers" />
+        </EntityType>
+        <EntityType Name="CustomerFeedback">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerID" Type="Int64" />
+          <Property Name="TableName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TableID" Type="Int64" />
+          <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Approved" Type="Boolean" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="CommentDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_CustomerFeedback_Customers" FromRole="CustomerFeedback" ToRole="Customers" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CustomerAddresses" Relationship="Self.FK_CustomerAddress_Customers" FromRole="Customers" ToRole="CustomerAddress" />
+          <NavigationProperty Name="CustomerFeedbacks" Relationship="Self.FK_CustomerFeedback_Customers" FromRole="Customers" ToRole="CustomerFeedback" />
+          <NavigationProperty Name="Invoices" Relationship="Self.FK_Invoices_Customers" FromRole="Customers" ToRole="Invoices" />
+          <NavigationProperty Name="Mails" Relationship="Self.FK_Mail_Customers" FromRole="Customers" ToRole="Mail" />
+        </EntityType>
+        <EntityType Name="InvoiceItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemID" Type="Int64" />
+          <Property Name="Quantity" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Discount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="InvoiceID" Type="Int64" />
+          <Property Name="OfferID" Type="Int64" />
+          <NavigationProperty Name="Invoice" Relationship="Self.FK_InvoiceItem_Invoices" FromRole="InvoiceItem" ToRole="Invoices" />
+          <NavigationProperty Name="Item" Relationship="Self.FK_InvoiceItem_Items" FromRole="InvoiceItem" ToRole="Items" />
+          <NavigationProperty Name="Offer" Relationship="Self.FK_InvoiceItem_Offers" FromRole="InvoiceItem" ToRole="Offers" />
+        </EntityType>
+        <EntityType Name="Invoice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerID" Type="Int64" />
+          <Property Name="RequestDate" Type="DateTime" Precision="0" />
+          <Property Name="RequestTime" Type="Time" Precision="7" />
+          <Property Name="TotalPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Discount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Tax" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="UserLogID" Type="Int64" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Served" Type="Boolean" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="Carpet" Type="Boolean" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Branch" Relationship="Self.FK_Invoices_Branch" FromRole="Invoices" ToRole="Branch" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_Invoices_Customers" FromRole="Invoices" ToRole="Customers" />
+          <NavigationProperty Name="InvoiceItems" Relationship="Self.FK_InvoiceItem_Invoices" FromRole="Invoices" ToRole="InvoiceItem" />
+          <NavigationProperty Name="UserLog" Relationship="Self.FK_Invoices_UserLog" FromRole="Invoices" ToRole="UserLog" />
+        </EntityType>
+        <EntityType Name="ItemEval">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BranchItemID" Type="Int64" />
+          <Property Name="EvalDegree" Type="Int32" />
+          <NavigationProperty Name="BranchItem" Relationship="Self.FK_ItemEval_BranchItem" FromRole="ItemEval" ToRole="BranchItem" />
+        </EntityType>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryID" Type="Int32" />
+          <Property Name="ItemNameAr" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ItemNameEn" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="PicURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DetailsAr" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DetailsEn" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Divisible" Type="Boolean" />
+          <Property Name="UserLogID" Type="Int64" />
+          <Property Name="Status" Type="Boolean" />
+          <NavigationProperty Name="BranchItems" Relationship="Self.FK_BranchItem_Items" FromRole="Items" ToRole="BranchItem" />
+          <NavigationProperty Name="Category" Relationship="Self.FK_Items_Category" FromRole="Items" ToRole="Category" />
+          <NavigationProperty Name="InvoiceItems" Relationship="Self.FK_InvoiceItem_Items" FromRole="Items" ToRole="InvoiceItem" />
+          <NavigationProperty Name="UserLog" Relationship="Self.FK_Items_UserLog" FromRole="Items" ToRole="UserLog" />
+          <NavigationProperty Name="OfferItems" Relationship="Self.FK_OfferItems_Items" FromRole="Items" ToRole="OfferItems" />
+        </EntityType>
+        <EntityType Name="Mail">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="CustomerID" Type="Int64" />
+          <Property Name="Subject" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Readed" Type="Boolean" />
+          <Property Name="SendDate" Type="DateTime" Precision="3" />
+          <Property Name="ViewDate" Type="DateTime" Precision="3" />
+          <Property Name="FromAdmin" Type="Boolean" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="Sent" Type="Boolean" />
+          <NavigationProperty Name="Branch" Relationship="Self.FK_Mail_Branch" FromRole="Mail" ToRole="Branch" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_Mail_Customers" FromRole="Mail" ToRole="Customers" />
+        </EntityType>
+        <EntityType Name="MarketEvaluation">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="EvalDegree" Type="Int32" />
+          <Property Name="ClientID" Type="Int32" />
+          <Property Name="EvalDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Branch" Relationship="Self.FK_MarketEvaluation_Branch" FromRole="MarketEvaluation" ToRole="Branch" />
+          <NavigationProperty Name="Client" Relationship="Self.FK_MarketEvaluation_Client" FromRole="MarketEvaluation" ToRole="Client" />
+        </EntityType>
+        <EntityType Name="OfferItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OfferID" Type="Int64" />
+          <Property Name="ItemID" Type="Int64" />
+          <Property Name="Quantity" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Status" Type="Boolean" />
+          <NavigationProperty Name="Item" Relationship="Self.FK_OfferItems_Items" FromRole="OfferItems" ToRole="Items" />
+          <NavigationProperty Name="Offer" Relationship="Self.FK_OfferItems_Offers" FromRole="OfferItems" ToRole="Offers" />
+        </EntityType>
+        <EntityType Name="Offer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OfferNameAr" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="OfferNameEn" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Precision="0" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="UserLogID" Type="Int64" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OfferPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="OrPrice" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="Pic" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Branch" Relationship="Self.FK_Offers_Offers" FromRole="Offers" ToRole="Branch" />
+          <NavigationProperty Name="InvoiceItems" Relationship="Self.FK_InvoiceItem_Offers" FromRole="Offers" ToRole="InvoiceItem" />
+          <NavigationProperty Name="OfferItems" Relationship="Self.FK_OfferItems_Offers" FromRole="Offers" ToRole="OfferItems" />
+          <NavigationProperty Name="UserLog" Relationship="Self.FK_Offers_UserLog" FromRole="Offers" ToRole="UserLog" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Boolean" />
+          <Property Name="UserType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsAdmin" Type="Boolean" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="Email" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Branch" Relationship="Self.FK_User_Branch" FromRole="User" ToRole="Branch" />
+          <NavigationProperty Name="UserLogs" Relationship="Self.FK_UserLog_User" FromRole="User" ToRole="UserLog" />
+        </EntityType>
+        <EntityType Name="UserLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="LoginTime" Type="DateTime" Precision="3" />
+          <Property Name="SafeAccount" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="Branches" Relationship="Self.FK_Branch_UserLog" FromRole="UserLog" ToRole="Branch" />
+          <NavigationProperty Name="BranchItems" Relationship="Self.FK_BranchItem_UserLog" FromRole="UserLog" ToRole="BranchItem" />
+          <NavigationProperty Name="BranchParticipations" Relationship="Self.FK_BranchParticipation_UserLog" FromRole="UserLog" ToRole="BranchParticipation" />
+          <NavigationProperty Name="Invoices" Relationship="Self.FK_Invoices_UserLog" FromRole="UserLog" ToRole="Invoices" />
+          <NavigationProperty Name="Items" Relationship="Self.FK_Items_UserLog" FromRole="UserLog" ToRole="Items" />
+          <NavigationProperty Name="Offers" Relationship="Self.FK_Offers_UserLog" FromRole="UserLog" ToRole="Offers" />
+          <NavigationProperty Name="User" Relationship="Self.FK_UserLog_User" FromRole="UserLog" ToRole="User" />
+        </EntityType>
+        <EntityType Name="ExtraCost">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ExtraTitle" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ExtraValue" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="UserLogID" Type="Int64" />
+          <Property Name="Status" Type="Boolean" />
+        </EntityType>
+        <Association Name="FK_Branch_Branch">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1" />
+          <End Role="Branch1" Type="Self.Branch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Branch1">
+              <PropertyRef Name="ParentBranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Branch_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
+          <End Role="Branch" Type="Self.Branch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Branch">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Branch_UserLog">
+          <End Role="UserLog" Type="Self.UserLog" Multiplicity="0..1" />
+          <End Role="Branch" Type="Self.Branch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserLog">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Branch">
+              <PropertyRef Name="UserLogID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BranchCategory_Branch">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BranchCategory" Type="Self.BranchCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BranchCategory">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BranchItem_Branch">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BranchItem" Type="Self.BranchItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BranchItem">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BranchParticipation_Branch">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BranchParticipation" Type="Self.BranchParticipation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BranchParticipation">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoices_Branch">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1" />
+          <End Role="Invoices" Type="Self.Invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Invoices">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Mail_Branch">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Mail" Type="Self.Mail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Mail">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MarketEvaluation_Branch">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="MarketEvaluation" Type="Self.MarketEvaluation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MarketEvaluation">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Offers_Offers">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Offers" Type="Self.Offer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Offers">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Branch">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1" />
+          <End Role="User" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BranchCategory_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BranchCategory" Type="Self.BranchCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BranchCategory">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BranchItem_Items">
+          <End Role="Items" Type="Self.Item" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="BranchItem" Type="Self.BranchItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Items">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BranchItem">
+              <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BranchItem_UserLog">
+          <End Role="UserLog" Type="Self.UserLog" Multiplicity="0..1" />
+          <End Role="BranchItem" Type="Self.BranchItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserLog">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BranchItem">
+              <PropertyRef Name="UserLogID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ItemEval_BranchItem">
+          <End Role="BranchItem" Type="Self.BranchItem" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ItemEval" Type="Self.ItemEval" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BranchItem">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ItemEval">
+              <PropertyRef Name="BranchItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_BranchParticipation_UserLog">
+          <End Role="UserLog" Type="Self.UserLog" Multiplicity="0..1" />
+          <End Role="BranchParticipation" Type="Self.BranchParticipation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserLog">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BranchParticipation">
+              <PropertyRef Name="UserLogID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Items_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Items" Type="Self.Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Items">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MarketEvaluation_Client">
+          <End Role="Client" Type="Self.Client" Multiplicity="0..1" />
+          <End Role="MarketEvaluation" Type="Self.MarketEvaluation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Client">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MarketEvaluation">
+              <PropertyRef Name="ClientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CustomerAddress_Customers">
+          <End Role="Customers" Type="Self.Customer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CustomerAddress" Type="Self.CustomerAddress" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CustomerAddress">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CustomerFeedback_Customers">
+          <End Role="Customers" Type="Self.Customer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CustomerFeedback" Type="Self.CustomerFeedback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CustomerFeedback">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoices_Customers">
+          <End Role="Customers" Type="Self.Customer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Invoices" Type="Self.Invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Invoices">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Mail_Customers">
+          <End Role="Customers" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="Mail" Type="Self.Mail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Mail">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvoiceItem_Invoices">
+          <End Role="Invoices" Type="Self.Invoice" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="InvoiceItem" Type="Self.InvoiceItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Invoices">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="InvoiceItem">
+              <PropertyRef Name="InvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvoiceItem_Items">
+          <End Role="Items" Type="Self.Item" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="InvoiceItem" Type="Self.InvoiceItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Items">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="InvoiceItem">
+              <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvoiceItem_Offers">
+          <End Role="Offers" Type="Self.Offer" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="InvoiceItem" Type="Self.InvoiceItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Offers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="InvoiceItem">
+              <PropertyRef Name="OfferID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Invoices_UserLog">
+          <End Role="UserLog" Type="Self.UserLog" Multiplicity="0..1" />
+          <End Role="Invoices" Type="Self.Invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserLog">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Invoices">
+              <PropertyRef Name="UserLogID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Items_UserLog">
+          <End Role="UserLog" Type="Self.UserLog" Multiplicity="0..1" />
+          <End Role="Items" Type="Self.Item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserLog">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Items">
+              <PropertyRef Name="UserLogID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OfferItems_Items">
+          <End Role="Items" Type="Self.Item" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OfferItems" Type="Self.OfferItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Items">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OfferItems">
+              <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OfferItems_Offers">
+          <End Role="Offers" Type="Self.Offer" Multiplicity="0..1" />
+          <End Role="OfferItems" Type="Self.OfferItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Offers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OfferItems">
+              <PropertyRef Name="OfferID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Offers_UserLog">
+          <End Role="UserLog" Type="Self.UserLog" Multiplicity="0..1" />
+          <End Role="Offers" Type="Self.Offer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserLog">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Offers">
+              <PropertyRef Name="UserLogID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserLog_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="UserLog" Type="Self.UserLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="UserLog">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HurghadaMarketEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Branches" EntityType="Self.Branch" />
+          <EntitySet Name="BranchCategories" EntityType="Self.BranchCategory" />
+          <EntitySet Name="BranchItems" EntityType="Self.BranchItem" />
+          <EntitySet Name="BranchParticipations" EntityType="Self.BranchParticipation" />
+          <EntitySet Name="Categories" EntityType="Self.Category" />
+          <EntitySet Name="Clients" EntityType="Self.Client" />
+          <EntitySet Name="CustomerAddresses" EntityType="Self.CustomerAddress" />
+          <EntitySet Name="CustomerFeedbacks" EntityType="Self.CustomerFeedback" />
+          <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="InvoiceItems" EntityType="Self.InvoiceItem" />
+          <EntitySet Name="Invoices" EntityType="Self.Invoice" />
+          <EntitySet Name="ItemEvals" EntityType="Self.ItemEval" />
+          <EntitySet Name="Items" EntityType="Self.Item" />
+          <EntitySet Name="Mails" EntityType="Self.Mail" />
+          <EntitySet Name="MarketEvaluations" EntityType="Self.MarketEvaluation" />
+          <EntitySet Name="OfferItems" EntityType="Self.OfferItem" />
+          <EntitySet Name="Offers" EntityType="Self.Offer" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="UserLogs" EntityType="Self.UserLog" />
+          <EntitySet Name="ExtraCosts" EntityType="Self.ExtraCost" />
+          <AssociationSet Name="FK_Branch_Branch" Association="Self.FK_Branch_Branch">
+            <End Role="Branch" EntitySet="Branches" />
+            <End Role="Branch1" EntitySet="Branches" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Branch_Category" Association="Self.FK_Branch_Category">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Branch" EntitySet="Branches" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Branch_UserLog" Association="Self.FK_Branch_UserLog">
+            <End Role="UserLog" EntitySet="UserLogs" />
+            <End Role="Branch" EntitySet="Branches" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BranchCategory_Branch" Association="Self.FK_BranchCategory_Branch">
+            <End Role="Branch" EntitySet="Branches" />
+            <End Role="BranchCategory" EntitySet="BranchCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BranchItem_Branch" Association="Self.FK_BranchItem_Branch">
+            <End Role="Branch" EntitySet="Branches" />
+            <End Role="BranchItem" EntitySet="BranchItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BranchParticipation_Branch" Association="Self.FK_BranchParticipation_Branch">
+            <End Role="Branch" EntitySet="Branches" />
+            <End Role="BranchParticipation" EntitySet="BranchParticipations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoices_Branch" Association="Self.FK_Invoices_Branch">
+            <End Role="Branch" EntitySet="Branches" />
+            <End Role="Invoices" EntitySet="Invoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Mail_Branch" Association="Self.FK_Mail_Branch">
+            <End Role="Branch" EntitySet="Branches" />
+            <End Role="Mail" EntitySet="Mails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MarketEvaluation_Branch" Association="Self.FK_MarketEvaluation_Branch">
+            <End Role="Branch" EntitySet="Branches" />
+            <End Role="MarketEvaluation" EntitySet="MarketEvaluations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Offers_Offers" Association="Self.FK_Offers_Offers">
+            <End Role="Branch" EntitySet="Branches" />
+            <End Role="Offers" EntitySet="Offers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Branch" Association="Self.FK_User_Branch">
+            <End Role="Branch" EntitySet="Branches" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BranchCategory_Category" Association="Self.FK_BranchCategory_Category">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="BranchCategory" EntitySet="BranchCategories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BranchItem_Items" Association="Self.FK_BranchItem_Items">
+            <End Role="Items" EntitySet="Items" />
+            <End Role="BranchItem" EntitySet="BranchItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BranchItem_UserLog" Association="Self.FK_BranchItem_UserLog">
+            <End Role="UserLog" EntitySet="UserLogs" />
+            <End Role="BranchItem" EntitySet="BranchItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ItemEval_BranchItem" Association="Self.FK_ItemEval_BranchItem">
+            <End Role="BranchItem" EntitySet="BranchItems" />
+            <End Role="ItemEval" EntitySet="ItemEvals" />
+          </AssociationSet>
+          <AssociationSet Name="FK_BranchParticipation_UserLog" Association="Self.FK_BranchParticipation_UserLog">
+            <End Role="UserLog" EntitySet="UserLogs" />
+            <End Role="BranchParticipation" EntitySet="BranchParticipations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Items_Category" Association="Self.FK_Items_Category">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Items" EntitySet="Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MarketEvaluation_Client" Association="Self.FK_MarketEvaluation_Client">
+            <End Role="Client" EntitySet="Clients" />
+            <End Role="MarketEvaluation" EntitySet="MarketEvaluations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CustomerAddress_Customers" Association="Self.FK_CustomerAddress_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="CustomerAddress" EntitySet="CustomerAddresses" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CustomerFeedback_Customers" Association="Self.FK_CustomerFeedback_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="CustomerFeedback" EntitySet="CustomerFeedbacks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoices_Customers" Association="Self.FK_Invoices_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Invoices" EntitySet="Invoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Mail_Customers" Association="Self.FK_Mail_Customers">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="Mail" EntitySet="Mails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvoiceItem_Invoices" Association="Self.FK_InvoiceItem_Invoices">
+            <End Role="Invoices" EntitySet="Invoices" />
+            <End Role="InvoiceItem" EntitySet="InvoiceItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvoiceItem_Items" Association="Self.FK_InvoiceItem_Items">
+            <End Role="Items" EntitySet="Items" />
+            <End Role="InvoiceItem" EntitySet="InvoiceItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvoiceItem_Offers" Association="Self.FK_InvoiceItem_Offers">
+            <End Role="Offers" EntitySet="Offers" />
+            <End Role="InvoiceItem" EntitySet="InvoiceItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Invoices_UserLog" Association="Self.FK_Invoices_UserLog">
+            <End Role="UserLog" EntitySet="UserLogs" />
+            <End Role="Invoices" EntitySet="Invoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Items_UserLog" Association="Self.FK_Items_UserLog">
+            <End Role="UserLog" EntitySet="UserLogs" />
+            <End Role="Items" EntitySet="Items" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OfferItems_Items" Association="Self.FK_OfferItems_Items">
+            <End Role="Items" EntitySet="Items" />
+            <End Role="OfferItems" EntitySet="OfferItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OfferItems_Offers" Association="Self.FK_OfferItems_Offers">
+            <End Role="Offers" EntitySet="Offers" />
+            <End Role="OfferItems" EntitySet="OfferItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Offers_UserLog" Association="Self.FK_Offers_UserLog">
+            <End Role="UserLog" EntitySet="UserLogs" />
+            <End Role="Offers" EntitySet="Offers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserLog_User" Association="Self.FK_UserLog_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserLog" EntitySet="UserLogs" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HurghadaMarketModelStoreContainer" CdmEntityContainer="HurghadaMarketEntities">
+          <EntitySetMapping Name="Branches">
+            <EntityTypeMapping TypeName="HurghadaMarketModel.Branch">
+              <MappingFragment StoreEntitySet="Branch">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ParentBranchID" ColumnName="ParentBranchID" />
+                <ScalarProperty Name="BranchNameAr" ColumnName="BranchNameAr" />
+                <ScalarProperty Name="BranchNameEn" ColumnName="BranchNameEn" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="AddressAr" ColumnName="AddressAr" />
+                <ScalarProperty Name="AddressEn" ColumnName="AddressEn" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="UserLogID" ColumnName="UserLogID" />
+                <ScalarProperty Name="DistanceRange" ColumnName="DistanceRange" />
+                <ScalarProperty Name="Logo" ColumnName="Logo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BranchCategories">
+            <EntityTypeMapping TypeName="HurghadaMarketModel.BranchCategory">
+              <MappingFragment StoreEntitySet="BranchCategory">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BranchItems">
+            <EntityTypeMapping TypeName="HurghadaMarketModel.BranchItem">
+              <MappingFragment StoreEntitySet="BranchItem">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="UserLogID" ColumnName="UserLogID" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BranchParticipations">
+            <EntityTypeMapping TypeName="HurghadaMarketModel.BranchParticipation">
+              <MappingFragment StoreEntitySet="BranchParticipation">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="PayedValue" ColumnName="PayedValue" />
+                <ScalarProperty Name="UserLogID" ColumnName="UserLogID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="HurghadaMarketModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CategoryNameAr" ColumnName="CategoryNameAr" />
+                <ScalarProperty Name="CategoryNameEn" ColumnName="CategoryNameEn" />
+                <ScalarProperty Name="CategoryType" ColumnName="CategoryType" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="Pic" ColumnName="Pic" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Clients">
+            <EntityTypeMapping TypeName="HurghadaMarketModel.Client">
+              <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerAddresses">
+            <EntityTypeMapping TypeName="HurghadaMarketModel.CustomerAddress">
+              <MappingFragment StoreEntitySet="CustomerAddress">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Details" ColumnName="Details" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerFeedbacks">
+            <EntityTypeMapping TypeName="HurghadaMarketModel.CustomerFeedback">
+              <MappingFragment StoreEntitySet="CustomerFeedback">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="TableName" ColumnName="TableName" />
+                <ScalarProperty Name="TableID" ColumnName="TableID" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="Approved" ColumnName="Approved" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CommentDate" ColumnName="CommentDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="HurghadaMarketModel.Customer">
+              <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InvoiceItems">
+            <EntityTypeMapping TypeName="HurghadaMarketModel.InvoiceItem">
+              <MappingFragment StoreEntitySet="InvoiceItem">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+                <ScalarProperty Name="OfferID" ColumnName="OfferID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Invoices">
+            <EntityTypeMapping TypeName="HurghadaMarketModel.Invoice">
+              <MappingFragment StoreEntitySet="Invoices">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="InvoiceCode" ColumnName="InvoiceCode" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="RequestDate" ColumnName="RequestDate" />
+                <ScalarProperty Name="RequestTime" ColumnName="RequestTime" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Tax" ColumnName="Tax" />
+                <ScalarProperty Name="UserLogID" ColumnName="UserLogID" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Served" ColumnName="Served" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="Carpet" ColumnName="Carpet" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ItemEvals">
+            <EntityTypeMapping TypeName="HurghadaMarketModel.ItemEval">
+              <MappingFragment StoreEntitySet="ItemEval">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="BranchItemID" ColumnName="BranchItemID" />
+                <ScalarProperty Name="EvalDegree" ColumnName="EvalDegree" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Items">
+            <EntityTypeMapping TypeName="HurghadaMarketModel.Item">
+              <MappingFragment StoreEntitySet="Items">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="ItemNameAr" ColumnName="ItemNameAr" />
+                <ScalarProperty Name="ItemNameEn" ColumnName="ItemNameEn" />
+                <ScalarProperty Name="PicURL" ColumnName="PicURL" />
+                <ScalarProperty Name="DetailsAr" ColumnName="DetailsAr" />
+                <ScalarProperty Name="DetailsEn" ColumnName="DetailsEn" />
+                <ScalarProperty Name="Divisible" ColumnName="Divisible" />
+                <ScalarProperty Name="UserLogID" ColumnName="UserLogID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mails">
+            <EntityTypeMapping TypeName="HurghadaMarketModel.Mail">
+              <MappingFragment StoreEntitySet="Mail">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="Subject" ColumnName="Subject" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Readed" ColumnName="Readed" />
+                <ScalarProperty Name="SendDate" ColumnName="SendDate" />
+                <ScalarProperty Name="ViewDate" ColumnName="ViewDate" />
+                <ScalarProperty Name="FromAdmin" ColumnName="FromAdmin" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Sent" ColumnName="Sent" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MarketEvaluations">
+            <EntityTypeMapping TypeName="HurghadaMarketModel.MarketEvaluation">
+              <MappingFragment StoreEntitySet="MarketEvaluation">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="EvalDegree" ColumnName="EvalDegree" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="EvalDate" ColumnName="EvalDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OfferItems">
+            <EntityTypeMapping TypeName="HurghadaMarketModel.OfferItem">
+              <MappingFragment StoreEntitySet="OfferItems">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="OfferID" ColumnName="OfferID" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Offers">
+            <EntityTypeMapping TypeName="HurghadaMarketModel.Offer">
+              <MappingFragment StoreEntitySet="Offers">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="OfferNameAr" ColumnName="OfferNameAr" />
+                <ScalarProperty Name="OfferNameEn" ColumnName="OfferNameEn" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UserLogID" ColumnName="UserLogID" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="OfferPrice" ColumnName="OfferPrice" />
+                <ScalarProperty Name="OrPrice" ColumnName="OrPrice" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="Pic" ColumnName="Pic" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="HurghadaMarketModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserPassword" ColumnName="UserPassword" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="IsAdmin" ColumnName="IsAdmin" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserLogs">
+            <EntityTypeMapping TypeName="HurghadaMarketModel.UserLog">
+              <MappingFragment StoreEntitySet="UserLog">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="LoginTime" ColumnName="LoginTime" />
+                <ScalarProperty Name="SafeAccount" ColumnName="SafeAccount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExtraCosts">
+            <EntityTypeMapping TypeName="HurghadaMarketModel.ExtraCost">
+              <MappingFragment StoreEntitySet="ExtraCost">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ExtraTitle" ColumnName="ExtraTitle" />
+                <ScalarProperty Name="ExtraValue" ColumnName="ExtraValue" />
+                <ScalarProperty Name="UserLogID" ColumnName="UserLogID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
