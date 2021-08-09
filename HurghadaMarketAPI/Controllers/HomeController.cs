@@ -195,7 +195,7 @@ namespace HurghadaMarketAPI.Controllers
                     }
                     else
                     {
-                        Item.Price += Price; //Get from Db Or from front ?
+                        Item.Price = Price;
                         Item.Quantity += Quantity;
                         _context.Entry(Item).State = EntityState.Modified;
                     }
@@ -282,7 +282,7 @@ namespace HurghadaMarketAPI.Controllers
                     }
                     else
                     {
-                        Item.Price += Price; //Not Importent  ??
+                        Item.Price = Price;
                         Item.Quantity += Quantity;
                         _context.Entry(Item).State = EntityState.Modified;
                     }

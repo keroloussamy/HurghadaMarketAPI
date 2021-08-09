@@ -176,7 +176,6 @@
     <Compile Include="DTOs\JsonResult.cs" />
     <Compile Include="DTOs\OfferDTO.cs" />
     <Compile Include="DTOs\OfferItemDTO.cs" />
-    <Compile Include="DTOs\OfferItemsData.cs" />
     <Compile Include="DTOs\PostCustomerDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -267,6 +266,7 @@
       <DependentUpon>HurghadaMarket.edmx</DependentUpon>
     </Content>
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\FTPProfile.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
