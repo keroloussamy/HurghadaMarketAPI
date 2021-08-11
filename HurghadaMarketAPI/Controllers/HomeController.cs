@@ -59,22 +59,24 @@ namespace HurghadaMarketAPI.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetBranches(string language = "en")
         {
-            var BrancheList = await _context.Branches.Include(b => b.BranchParticipations).ToListAsync();
+            var BrancheList = await _context.Branches.Where(x => x.BranchParticipations
+            .Where(bp => bp.StartDate <= DateTime.Now.Date && bp.EndDate >= DateTime.Now.Date && bp.Status == true)
+            .Count() > 0)
+            .Include(b => b.BranchParticipations).ToListAsync();
+
             List<BranchDTO> FilteredList = new List<BranchDTO>();
             foreach (var item in BrancheList)
             {
-                if (item.BranchParticipations.Any(x => x.StartDate <= DateTime.Now.Date && x.EndDate >= DateTime.Now.Date))
-                {
-                    if (language == "ar")
-                    {
-                        FilteredList.Add(new BranchDTO { Id = item.ID, BranchName = item.BranchNameAr, Logo = item.Logo });
-                    }
-                    else
-                    {
-                        FilteredList.Add(new BranchDTO { Id = item.ID, BranchName = item.BranchNameEn, Logo = item.Logo });
-                    }
 
+                if (language == "ar")
+                {
+                    FilteredList.Add(new BranchDTO { Id = item.ID, BranchName = item.BranchNameAr, Logo = item.Logo });
                 }
+                else
+                {
+                    FilteredList.Add(new BranchDTO { Id = item.ID, BranchName = item.BranchNameEn, Logo = item.Logo });
+                }
+
             }
 
             return Ok(new JsonResult<BranchDTO>() { Message = "Item Created Successfully", Result = FilteredList });
@@ -148,7 +150,7 @@ namespace HurghadaMarketAPI.Controllers
             try
             {
                 var items = await _context.BranchItems.Where(x => x.BranchID == BranchID && x.Item.CategoryID == CategoryID).Include(x => x.Item)
-                .Select(x => new { x.ItemID, x.Item.ItemNameAr, x.Item.ItemNameEn, x.Item.PicURL, x.Item.DetailsAr, x.Item.DetailsEn, x.Item.Divisible, x.Price, x.OrderID }).OrderBy(x => x.OrderID).ToListAsync();
+                .Select(x => new { x.ItemID, x.Item.ItemNameAr, x.Item.ItemNameEn, x.Item.PicURL, x.Notes, x.Item.DetailsEn, x.Item.Divisible, x.Price, x.OrderID }).OrderBy(x => x.OrderID).ToListAsync();
 
                 if (items == null)
                 {
@@ -158,7 +160,7 @@ namespace HurghadaMarketAPI.Controllers
                 List<BranchItemDTO> BranchItemDTOs = new List<BranchItemDTO>();
                 foreach (var item in items)
                 {
-                    BranchItemDTOs.Add(new BranchItemDTO { Id = item.ItemID, ItemName = Language == "ar" ? item.ItemNameAr : item.ItemNameEn, PicUrl = item.PicURL, Details = Language == "ar" ? item.DetailsAr : item.DetailsEn, Divisible = item.Divisible, Price = item.Price });
+                    BranchItemDTOs.Add(new BranchItemDTO { Id = item.ItemID, ItemName = Language == "ar" ? item.ItemNameAr : item.ItemNameEn, PicUrl = item.PicURL, Details = Language == "ar" ? item.Notes : item.Notes, Divisible = item.Divisible, Price = item.Price });
                 }
 
                 return Ok(new JsonResult<BranchItemDTO>() { Message = "Items Returned Successfully", Result = BranchItemDTOs });
