@@ -102,11 +102,11 @@ namespace HurghadaMarketAPI.Controllers
             {
                 if (language == "ar")
                 {
-                    OfferDTOList.Add(new OfferDTO { Id = item.ID, OfferName = item.OfferNameAr, OfferPrice = item.OfferPrice, OrPrice = item.OrPrice });
+                    OfferDTOList.Add(new OfferDTO { Id = item.ID, OfferName = item.OfferNameAr, OfferPrice = item.OfferPrice, OrPrice = item.OrPrice, BranchID = BranchID });
                 }
                 else
                 {
-                    OfferDTOList.Add(new OfferDTO { Id = item.ID, OfferName = item.OfferNameEn, OfferPrice = item.OfferPrice, OrPrice = item.OrPrice });
+                    OfferDTOList.Add(new OfferDTO { Id = item.ID, OfferName = item.OfferNameEn, OfferPrice = item.OfferPrice, OrPrice = item.OrPrice, BranchID = BranchID });
                 }
             }
 
