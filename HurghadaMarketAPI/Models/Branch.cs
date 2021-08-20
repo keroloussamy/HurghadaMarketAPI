@@ -21,7 +21,8 @@ namespace HurghadaMarketAPI.Models
             this.BranchCategories = new HashSet<BranchCategory>();
             this.BranchItems = new HashSet<BranchItem>();
             this.BranchParticipations = new HashSet<BranchParticipation>();
-            this.Invoices = new HashSet<Invoice>();
+            this.ExtraCosts = new HashSet<ExtraCost>();
+            this.InvoiceItems = new HashSet<InvoiceItem>();
             this.Mails = new HashSet<Mail>();
             this.MarketEvaluations = new HashSet<MarketEvaluation>();
             this.Offers = new HashSet<Offer>();
@@ -42,6 +43,8 @@ namespace HurghadaMarketAPI.Models
         public Nullable<long> UserLogID { get; set; }
         public Nullable<decimal> DistanceRange { get; set; }
         public string Logo { get; set; }
+        public string DeliveryTime { get; set; }
+        public Nullable<bool> Opened { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Branch> Branch1 { get; set; }
@@ -55,7 +58,9 @@ namespace HurghadaMarketAPI.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BranchParticipation> BranchParticipations { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Invoice> Invoices { get; set; }
+        public virtual ICollection<ExtraCost> ExtraCosts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<InvoiceItem> InvoiceItems { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Mail> Mails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

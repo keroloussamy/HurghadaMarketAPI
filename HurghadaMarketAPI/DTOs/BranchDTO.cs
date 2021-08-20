@@ -10,6 +10,8 @@ namespace HurghadaMarketAPI.DTOs
         public int Id { get; set; }
         public string BranchName { get; set; }
         public string Logo { get; set; }
+        public string DeliveryTime { get; set; }
+        public bool? Opened { get; set; }
 
     }
 }

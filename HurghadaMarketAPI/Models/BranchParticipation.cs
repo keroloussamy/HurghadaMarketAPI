@@ -21,6 +21,7 @@ namespace HurghadaMarketAPI.Models
         public Nullable<decimal> PayedValue { get; set; }
         public Nullable<long> UserLogID { get; set; }
         public Nullable<bool> Status { get; set; }
+        public Nullable<bool> Commision { get; set; }
     
         public virtual Branch Branch { get; set; }
         public virtual UserLog UserLog { get; set; }

@@ -14,12 +14,13 @@ using System.Web.Services.Description;
 using System.Data.Entity.Core.Objects;
 using System.Web.Http.Cors;
 
+
 namespace HurghadaMarketAPI.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class HomeController : ApiController
     {
-        private HurghadaMarketEntities _context = new HurghadaMarketEntities();
+        private HurghadaMarketEntities1 _context = new HurghadaMarketEntities1();
 
         // Register
         [HttpPost]
@@ -37,7 +38,9 @@ namespace HurghadaMarketAPI.Controllers
                 }
                 else
                 {
-                    newCustomer = new Customer { Status = true, CustomerName = customer.CustomerName, Phone = customer.Phone, CustomerAddresses = new List<CustomerAddress> { new CustomerAddress { Address = customer.Address } } };
+                    newCustomer = new Customer { Status = true, CustomerName = customer.CustomerName, Phone = customer.Phone, 
+                        CustomerAddresses = new List<CustomerAddress> { new CustomerAddress { Address = customer.Address } } 
+                    };
                     _context.Customers.Add(newCustomer);
                 }
                 await _context.SaveChangesAsync();
@@ -45,10 +48,7 @@ namespace HurghadaMarketAPI.Controllers
                 return Ok(new { Message = "Item Created Successfully", Id = newCustomer.ID });
             }
             catch (Exception ex)
-            {
-
-                return Ok(new { Message = ex.Message });
-            }
+            { return BadRequest(ex.Message); }
 
         }
 
@@ -59,27 +59,32 @@ namespace HurghadaMarketAPI.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetBranches(string language = "en")
         {
-            var BrancheList = await _context.Branches.Where(x => x.BranchParticipations
-            .Where(bp => bp.StartDate <= DateTime.Now.Date && bp.EndDate >= DateTime.Now.Date && bp.Status == true)
-            .Count() > 0)
-            .Include(b => b.BranchParticipations).ToListAsync();
-
-            List<BranchDTO> FilteredList = new List<BranchDTO>();
-            foreach (var item in BrancheList)
+            try
             {
+                var BrancheList = await _context.Branches.Where(x => x.BranchParticipations
+                .Where(bp => bp.StartDate <= TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")) &&
+                bp.EndDate >= TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time"))
+                && bp.Status == true).Count() > 0).Include(b => b.BranchParticipations).ToListAsync();
 
-                if (language == "ar")
+                List<BranchDTO> FilteredList = new List<BranchDTO>();
+                foreach (var item in BrancheList)
                 {
-                    FilteredList.Add(new BranchDTO { Id = item.ID, BranchName = item.BranchNameAr, Logo = item.Logo });
-                }
-                else
-                {
-                    FilteredList.Add(new BranchDTO { Id = item.ID, BranchName = item.BranchNameEn, Logo = item.Logo });
-                }
 
+                    if (language == "ar")
+                    {
+                        FilteredList.Add(new BranchDTO { Id = item.ID, BranchName = item.BranchNameAr, Logo = item.Logo, DeliveryTime = item.DeliveryTime, Opened = item.Opened });
+                    }
+                    else
+                    {
+                        FilteredList.Add(new BranchDTO { Id = item.ID, BranchName = item.BranchNameEn, Logo = item.Logo, DeliveryTime = item.DeliveryTime, Opened = item.Opened });
+                    }
+
+                }
+                return Ok(new JsonResult<BranchDTO>() { Message = "Item Created Successfully", Result = FilteredList });
             }
+            catch (Exception ex)
+            { return BadRequest(ex.Message); }
 
-            return Ok(new JsonResult<BranchDTO>() { Message = "Item Created Successfully", Result = FilteredList });
         }
 
 
@@ -90,27 +95,34 @@ namespace HurghadaMarketAPI.Controllers
         [Route("GetOffers")]
         public async Task<IHttpActionResult> GetOffers(long BranchID, string language = "en")
         {
-
-            var offersList = await _context.Offers.Where(
-                x => x.StartDate <= DbFunctions.TruncateTime(DateTime.Now)
-                && x.EndDate >= DbFunctions.TruncateTime(DateTime.Now)
+            try
+            {
+                var offersList = await _context.Offers.Where(
+                x => x.StartDate <= TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time"))
+                && x.EndDate >= TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time"))
                 && x.Status == true
                 && x.BranchID == BranchID).ToListAsync();
 
-            List<OfferDTO> OfferDTOList = new List<OfferDTO>();
-            foreach (var item in offersList)
+                List<OfferDTO> OfferDTOList = new List<OfferDTO>();
+                foreach (var item in offersList)
+                {
+                    if (language == "ar")
+                    {
+                        OfferDTOList.Add(new OfferDTO { Id = item.ID, OfferName = item.OfferNameAr, OfferPrice = item.OfferPrice, OrPrice = item.OrPrice, Pic = item.Pic });
+                    }
+                    else
+                    {
+                        OfferDTOList.Add(new OfferDTO { Id = item.ID, OfferName = item.OfferNameEn, OfferPrice = item.OfferPrice, OrPrice = item.OrPrice, Pic = item.Pic });
+                    }
+                }
+
+                return Ok(new JsonResult<OfferDTO>() { Message = "Offers Returned Successfully", Result = OfferDTOList });
+            }
+            catch (Exception ex)
             {
-                if (language == "ar")
-                {
-                    OfferDTOList.Add(new OfferDTO { Id = item.ID, OfferName = item.OfferNameAr, OfferPrice = item.OfferPrice, OrPrice = item.OrPrice });
-                }
-                else
-                {
-                    OfferDTOList.Add(new OfferDTO { Id = item.ID, OfferName = item.OfferNameEn, OfferPrice = item.OfferPrice, OrPrice = item.OrPrice });
-                }
+                return BadRequest(ex.Message);
             }
 
-            return Ok(new JsonResult<OfferDTO>() { Message = "Offers Returned Successfully", Result = OfferDTOList });
         }
 
         //http://localhost:60785/GetCategories?BranchID=1&language=ar
@@ -118,25 +130,33 @@ namespace HurghadaMarketAPI.Controllers
         [Route("GetCategories")]
         public async Task<IHttpActionResult> GetCategories(long BranchID, string Language = "en")
         {
-
-            var categoryIDs = await _context.BranchCategories.Where(x => x.BranchID == BranchID).OrderBy(x => x.OrderID).Select(x => x.CategoryID).ToListAsync();
-
-
-            List<CategoryDTO> categoryDTOs = new List<CategoryDTO>();
-            foreach (var id in categoryIDs)
+            try
             {
-                var category = await _context.Categories.FirstOrDefaultAsync(x => x.ID == id);
-                if (category != null && Language == "ar")
-                {
-                    categoryDTOs.Add(new CategoryDTO { Id = category.ID, CategoryName = category.CategoryNameAr, Pic = category.Pic, BranchID = BranchID });
-                }
-                else
-                {
-                    categoryDTOs.Add(new CategoryDTO { Id = category.ID, CategoryName = category.CategoryNameEn, Pic = category.Pic, BranchID = BranchID });
-                }
-            }
+                var categoryIDs = await _context.BranchCategories.Where(x => x.BranchID == BranchID && x.Status == true)
+                .OrderBy(x => x.OrderID).Select(x => x.CategoryID).ToListAsync();
 
-            return Ok(new JsonResult<CategoryDTO>() { Message = "Item Returned Successfully", Result = categoryDTOs });
+                List<CategoryDTO> categoryDTOs = new List<CategoryDTO>();
+                foreach (var id in categoryIDs)
+                {
+                    var category = await _context.Categories.FirstOrDefaultAsync(x => x.ID == id);
+                    var itemlist = _context.BranchItems.Where(x => x.Item.CategoryID == category.ID && x.BranchID == BranchID && x.Status == true).ToList();
+                    if (itemlist.Count != 0)
+                    {
+                        if (category != null && Language == "ar")
+                        {
+                            categoryDTOs.Add(new CategoryDTO { Id = category.ID, CategoryName = category.CategoryNameAr, Pic = category.Pic, BranchID = BranchID });
+                        }
+                        else
+                        {
+                            categoryDTOs.Add(new CategoryDTO { Id = category.ID, CategoryName = category.CategoryNameEn, Pic = category.Pic, BranchID = BranchID });
+                        }
+                    }
+                }
+
+                return Ok(new JsonResult<CategoryDTO>() { Message = "Item Returned Successfully", Result = categoryDTOs });
+            }
+            catch (Exception ex)
+            { return BadRequest(ex.Message); }
         }
 
 
@@ -149,7 +169,7 @@ namespace HurghadaMarketAPI.Controllers
         {
             try
             {
-                var items = await _context.BranchItems.Where(x => x.BranchID == BranchID && x.Item.CategoryID == CategoryID).Include(x => x.Item)
+                var items = await _context.BranchItems.Where(x => x.BranchID == BranchID && x.Item.CategoryID == CategoryID && x.Status == true && x.Item.Status == true)
                 .Select(x => new { x.ItemID, x.Item.ItemNameAr, x.Item.ItemNameEn, x.Item.PicURL, x.Notes, x.Item.DetailsEn, x.Item.Divisible, x.Price, x.OrderID }).OrderBy(x => x.OrderID).ToListAsync();
 
                 if (items == null)
@@ -166,34 +186,35 @@ namespace HurghadaMarketAPI.Controllers
                 return Ok(new JsonResult<BranchItemDTO>() { Message = "Items Returned Successfully", Result = BranchItemDTOs });
             }
             catch (Exception ex)
-            {
-                return Ok(new JsonResult<BranchItemDTO>() { Message = ex.Message, Result = null });
-            }
+            { return BadRequest(ex.Message); }
 
         }
 
         //http://localhost:60785/AddItemToCarpet?CustomerID=1&ID=1&Price=20&Quantity=2
         [HttpGet]
         [Route("AddItemToCarpet")]
-        public async Task<IHttpActionResult> AddItemToCarpet(long CustomerID, long ID, decimal Price, decimal Quantity) //ID = itemID
+        public async Task<IHttpActionResult> AddItemToCarpet(long CustomerID, long ID, decimal Price, decimal Quantity, Int32 BranchID) //ID = itemID, Check for BranchID == 0 when the item will updated not added.
         {
             try
             {
                 var invoiceID = await _context.Invoices.Where(x => x.CustomerID == CustomerID && x.Carpet == true).Select(x => x.ID).FirstOrDefaultAsync();
                 if (invoiceID == 0) //long default   //No Carpet
                 {
-                    var newInvoice = new Invoice { CustomerID = CustomerID, RequestDate = DateTime.Now.Date, RequestTime = DateTime.Now.TimeOfDay, Carpet = true };
-                    _context.Invoices.Add(newInvoice); //The rest of the values ?
+                    var newInvoice = new Invoice { CustomerID = CustomerID, 
+                        RequestDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")), 
+                        RequestTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")).TimeOfDay,
+                        //InvoiceCode = System.IO.Path.GetRandomFileName(),
+                        Carpet = true };
+                    _context.Invoices.Add(newInvoice);
                     await _context.SaveChangesAsync();
-                    _context.InvoiceItems.Add(new InvoiceItem { ItemID = ID, Price = Price, Quantity = Quantity, InvoiceID = newInvoice.ID });  //Discount, Notes, OfferID  Should I Put Them ?
-
+                    _context.InvoiceItems.Add(new InvoiceItem { ItemID = ID, Price = Price, Quantity = Quantity, InvoiceID = newInvoice.ID, BranchID = BranchID });  //Discount, Notes, OfferID  Should I Put Them ?
                 }
                 else //There's carpet, so add item
                 {
                     var Item = _context.InvoiceItems.FirstOrDefault(x => x.InvoiceID == invoiceID && x.ItemID == ID);
                     if (Item == null)
                     {
-                        _context.InvoiceItems.Add(new InvoiceItem { ItemID = ID, Price = Price, Quantity = Quantity, InvoiceID = invoiceID });  //Discount, Notes, OfferID  Should I Put Them ?
+                        _context.InvoiceItems.Add(new InvoiceItem { ItemID = ID, Price = Price, Quantity = Quantity, InvoiceID = invoiceID, BranchID = BranchID });  //Discount, Notes, OfferID  Should I Put Them ?
                     }
                     else
                     {
@@ -201,21 +222,12 @@ namespace HurghadaMarketAPI.Controllers
                         Item.Quantity += Quantity;
                         _context.Entry(Item).State = EntityState.Modified;
                     }
-
                 }
                 await _context.SaveChangesAsync();
-                return Ok(new
-                {
-                    Message = "Item Added Successfully"
-                });
+                return Ok("Item Added Successfully");
             }
             catch (Exception ex)
-            {
-                return Ok(new
-                {
-                    Message = ex.Message
-                });
-            }
+            { return BadRequest(ex.Message); }
 
         }
 
@@ -229,17 +241,11 @@ namespace HurghadaMarketAPI.Controllers
         {
             try
             {
-                //var items = await _context.OfferItems.Where(x => x.OfferID == OfferID)
-                //.Include(x => x.Item)
-                //.ThenInclude(x => x.BranchItems)
-                //.Select(x => new { x.ItemID, x.Quantity, x.Item.BranchItems.FirstOrDefault(b => b.ItemId == x.ItemId).OrderId, x.Item.PicUrl, x.Item.ItemNameAr, x.Item.ItemNameEn })
-                //.OrderBy(x => x.OrderId).ToListAsync();
 
-                var items = await _context.OfferItems.Where(x => x.OfferID == OfferID)
+                var items = await _context.OfferItems.Where(x => x.OfferID == OfferID && x.Status == true)
                .Include(x => x.Item)
                .Select(x => new { x.ItemID, x.Quantity, x.Item.BranchItems.FirstOrDefault(b => b.ItemID == x.ItemID).OrderID, x.Item.PicURL, x.Item.ItemNameAr, x.Item.ItemNameEn })
                .OrderBy(x => x.OrderID).ToListAsync();
-
 
                 List<OfferItemDTO> OfferItemDTOs = new List<OfferItemDTO>();
                 var name = string.Empty;
@@ -252,8 +258,7 @@ namespace HurghadaMarketAPI.Controllers
             }
             catch (Exception ex)
             {
-
-                return Ok(new JsonResult<OfferItemDTO>() { Message = ex.Message, Result = null });
+                return BadRequest(ex.Message);
             }
 
         }
@@ -261,17 +266,21 @@ namespace HurghadaMarketAPI.Controllers
         //http://localhost:60785/AddOfferToCarpet?CustomerID=1&ID=1&Price=20&Quantity=2
         [HttpGet]
         [Route("AddOfferToCarpet")]
-        public async Task<IHttpActionResult> AddOfferToCarpet(long CustomerID, long ID, decimal Price, decimal Quantity) //ID = offerID
+        public async Task<IHttpActionResult> AddOfferToCarpet(long CustomerID, long ID, decimal Price, decimal Quantity, Int32 BranchID) //ID = offerID, Check for BranchID == 0 when the item will updated not added.
         {
             try
             {
                 var invoiceID = await _context.Invoices.Where(x => x.CustomerID == CustomerID && x.Carpet == true).Select(x => x.ID).FirstOrDefaultAsync();
                 if (invoiceID == 0) //long default   //No Carpet
                 {
-                    var newInvoice = new Invoice { CustomerID = CustomerID, RequestDate = DateTime.Now.Date, RequestTime = DateTime.Now.TimeOfDay, Carpet = true };
+                    var newInvoice = new Invoice { CustomerID = CustomerID, 
+                        RequestDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")),
+                        RequestTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")).TimeOfDay,
+                        //InvoiceCode = System.IO.Path.GetRandomFileName(),
+                        Carpet = true };
                     _context.Invoices.Add(newInvoice);
                     await _context.SaveChangesAsync();
-                    _context.InvoiceItems.Add(new InvoiceItem { OfferID = ID, Price = Price, Quantity = Quantity, InvoiceID = newInvoice.ID });
+                    _context.InvoiceItems.Add(new InvoiceItem { OfferID = ID, Price = Price, Quantity = Quantity, InvoiceID = newInvoice.ID, BranchID = BranchID });
 
                     await _context.SaveChangesAsync();
                 }
@@ -280,7 +289,7 @@ namespace HurghadaMarketAPI.Controllers
                     var Item = _context.InvoiceItems.FirstOrDefault(x => x.InvoiceID == invoiceID && x.OfferID == ID);
                     if (Item == null)
                     {
-                        _context.InvoiceItems.Add(new InvoiceItem { OfferID = ID, Price = Price, Quantity = Quantity, InvoiceID = invoiceID });
+                        _context.InvoiceItems.Add(new InvoiceItem { OfferID = ID, Price = Price, Quantity = Quantity, InvoiceID = invoiceID, BranchID = BranchID });
                     }
                     else
                     {
@@ -290,11 +299,11 @@ namespace HurghadaMarketAPI.Controllers
                     }
                     await _context.SaveChangesAsync();
                 }
-                return Ok(new { Message = "Offer Added Successfully" });
+                return Ok("Offer Added Successfully");
             }
             catch (Exception ex)
             {
-                return Ok(new { Message = ex.Message });
+                return BadRequest(ex.Message);
             }
 
         }
@@ -357,7 +366,9 @@ namespace HurghadaMarketAPI.Controllers
                             if (Language == "ar") { name = item.Offer.OfferNameAr; }
                             else { name = item.Offer.OfferNameEn; }
                             if (item.Price != item.Offer.OfferPrice) { priceUpdated = true; }
-                            if (!(item.Offer.StartDate <= DateTime.Now.Date && item.Offer.EndDate >= DateTime.Now.Date)) { ended = true; }
+                            if (!(item.Offer.StartDate <= TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")) &&
+                                item.Offer.EndDate >= TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")))) 
+                            { ended = true; }
 
                             result.Result.Add(new CarpetItemsDTO
                             {
@@ -386,33 +397,198 @@ namespace HurghadaMarketAPI.Controllers
                 }
                 else
                 {
-                    result.Message = "This Carpet not exist or Confirmed";
-                    return Ok(result);
+                    return BadRequest("This Carpet not exist or Confirmed");
                 }
 
             }
             catch (Exception ex)
             {
-                result.Message = ex.Message;
-                return Ok(result);
+                return BadRequest(ex.Message);
             }
+
+        }
+        
+        [HttpGet]
+        [Route("CarpetConfirmed")]
+        public async Task<IHttpActionResult> CarpetConfirmed(long CustomerID, decimal totalPrice)
+        {
+            try
+            {
+                //Random newR = new Random();
+                //Int64 RandomeCode = newR.Next(100000, 9999999);
+                var invoice = await _context.Invoices.FirstOrDefaultAsync(x => x.CustomerID == CustomerID && x.Carpet == true);
+                if (invoice != null)
+                {
+                    invoice.Carpet = false;
+                    invoice.RequestTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")).TimeOfDay;
+                    invoice.RequestDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time"));
+                    invoice.Served = false;
+                    invoice.TotalPrice = totalPrice;
+                    _context.Entry(invoice).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+
+                    //Call GetExtraCostsList and set in invoiceextracost
+                    var extraCostsList = GetExtraCostsList("en", invoice.ID);
+                    if (extraCostsList != null)
+                    {
+                        foreach (var item in extraCostsList)
+                        {
+                            var newInvoiceExtraCost = new InvoiceExtraCost
+                            {
+                                InvoiceID = invoice.ID,
+                                ExtraCostID = item.ID,
+                                ExtraCostValue = item.ExtraValue
+                            };
+                            _context.InvoiceExtraCosts.Add(newInvoiceExtraCost);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                }
+                else { return BadRequest("Carpet alrady Confirmed"); }
+            }
+            catch (Exception ex) { return BadRequest(ex.Message); }
+
+            return Ok(new { Message = "Carpet Confirmed Successfully" });
+        }
+
+        
+        [HttpGet]
+        [Route("DeleteItemFromCarpet")]
+        public async Task<IHttpActionResult> DeleteItemFromCarpet(long ItemId, long CustomerID)
+        {
+            var invoiceID = await _context.Invoices.Where(x => x.CustomerID == CustomerID && x.Carpet == true).Select(x => x.ID).FirstOrDefaultAsync();
+            if (invoiceID != 0)
+            {
+                var invoiceItem = _context.InvoiceItems.Where(x => x.ItemID == ItemId).FirstOrDefault();
+                if (invoiceItem == null)
+                { return NotFound(); }
+
+                _context.InvoiceItems.Remove(invoiceItem);
+                await _context.SaveChangesAsync();
+                return Ok("Item Deleted Successfully.");
+            }
+            else
+            { return BadRequest("No Carpet For This User."); }
+        }
+
+        [HttpGet]
+        [Route("GetExtraCost")]
+        public async Task<IHttpActionResult> GetExtraCost(string Language, long CustomerID)
+        {
+            try
+            {
+                var invoiceID = await _context.Invoices.Where(x => x.CustomerID == CustomerID && x.Carpet == true).Select(x => x.ID).FirstOrDefaultAsync();
+                if (invoiceID != 0)
+                {
+                    var result = GetExtraCostsList(Language, invoiceID);
+                    if (result != null)
+                    {
+                        return Ok(new JsonResult<ExtraCostDTO> { Message = "Items Returned Successfully", Result = result });
+                    }
+                    else { return BadRequest("No BranchIDs For This User."); }
+                }
+                else
+                { return BadRequest("No Carpet For This User."); }
+            }
+            catch (Exception ex)
+            { return BadRequest(ex.Message); }
 
         }
 
         [HttpGet]
-        [Route("CarpetConfirmed")]
-        public async Task<IHttpActionResult> CarpetConfirmed(long CustomerID, bool status)
+        [Route("SetMarketEvaluation")]
+        public async Task<IHttpActionResult> SetMarketEvaluation(int BranchID, int EvalDegree, int ClientID)
         {
             try
             {
-                var invoice = await _context.Invoices.FirstOrDefaultAsync(x => x.CustomerID == CustomerID);
-                invoice.Carpet = status;
-                _context.Entry(invoice).State = EntityState.Modified;
+                var BranchId = _context.Branches.Where(x => x.ID == BranchID).Select(x => x.ID).FirstOrDefault();
+                if (BranchId == 0) { return BadRequest("This Branch Is Not Exist."); }
+                var ClientId = _context.Clients.Where(x => x.ID == ClientID).Select(x => x.ID).FirstOrDefault();
+                if (ClientId == 0) { return BadRequest("This Client Is Not Exist."); }
+                var newMarketEvaluation = new MarketEvaluation
+                {
+                    BranchID = BranchID,
+                    ClientID = ClientID,
+                    EvalDegree = EvalDegree,
+                    EvalDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time"))
+                };
+                _context.MarketEvaluations.Add(newMarketEvaluation);
                 await _context.SaveChangesAsync();
+                return Ok("Evaluation Added Successfully");
             }
-            catch (Exception ex) { return Ok(new { Message = ex.Message }); }
-
-            return Ok(new { Message = "Carpet Confirmed Successfully" });
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
+
+        [HttpGet]
+        [Route("SetCustomerFeedback")]
+        public async Task<IHttpActionResult> SetCustomerFeedback(int BranchID, long CustomerID, string Comment)
+        {
+            try
+            {
+                var CusId = _context.Customers.FirstOrDefault(x => x.ID == CustomerID && x.Status == true);
+                if (CusId == null) { return BadRequest("This Customer Is Not Exist."); }
+
+                var BraId = _context.Branches.FirstOrDefault(x => x.ID == BranchID && x.Status == true);
+                if (BraId == null) { return BadRequest("This Branch Is Not Exist."); }
+
+                if (Comment != null)
+                {
+                    var newCustomerFeedback = new CustomerFeedback
+                    {
+                        TableName = "Branch",
+                        TableID = BranchID,
+                        Approved = true,
+                        Comment = Comment,
+                        CommentDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")),
+                        CustomerID = CustomerID,
+                        Status = true
+                    };
+                    _context.CustomerFeedbacks.Add(newCustomerFeedback);
+                    await _context.SaveChangesAsync();
+                    return Ok("Feedback Added Successfully");
+                }
+                else { return BadRequest("Please Add A Comment."); }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+        
+        private List<ExtraCostDTO> GetExtraCostsList(string Language, long invoiceID)
+        {
+
+            var BranchIDs = _context.InvoiceItems.Where(x => x.InvoiceID == invoiceID).Select(x => x.BranchID).Distinct().ToList();
+            if (BranchIDs != null)
+            {
+                var extraCostsDTOList = new List<ExtraCostDTO>();
+                foreach (var branchID in BranchIDs)
+                {
+                    var extraCostList = _context.ExtraCosts.Where(x => x.BranchID == branchID && x.Status == true).ToList();
+                    if (extraCostList != null)
+                    {
+                        foreach (var extraCost in extraCostList)
+                        {
+                            extraCostsDTOList.Add(new ExtraCostDTO
+                            {
+                                BranchName = Language == "ar" ? extraCost.Branch.BranchNameAr : extraCost.Branch.BranchNameEn,
+                                ExtraTitle = Language == "ar" ? extraCost.ExtraTitleAr : extraCost.ExtraTitleEn,
+                                ExtraValue = extraCost.ExtraValue,
+                                ID = extraCost.ID
+                            });
+                        }
+
+                    }
+                }
+                return extraCostsDTOList;
+            }
+            else { return null; }
+        }
+        
     }
 }

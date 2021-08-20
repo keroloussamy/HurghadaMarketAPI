@@ -14,10 +14,22 @@ namespace HurghadaMarketAPI.Models
     
     public partial class ExtraCost
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ExtraCost()
+        {
+            this.InvoiceExtraCosts = new HashSet<InvoiceExtraCost>();
+        }
+    
         public int ID { get; set; }
-        public string ExtraTitle { get; set; }
+        public string ExtraTitleAr { get; set; }
+        public string ExtraTitleEn { get; set; }
         public Nullable<decimal> ExtraValue { get; set; }
         public Nullable<long> UserLogID { get; set; }
         public Nullable<bool> Status { get; set; }
+        public Nullable<int> BranchID { get; set; }
+    
+        public virtual Branch Branch { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<InvoiceExtraCost> InvoiceExtraCosts { get; set; }
     }
 }

@@ -12,21 +12,14 @@ namespace HurghadaMarketAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class InvoiceItem
+    public partial class InvoiceExtraCost
     {
         public long ID { get; set; }
-        public Nullable<long> ItemID { get; set; }
-        public Nullable<decimal> Quantity { get; set; }
-        public Nullable<decimal> Price { get; set; }
-        public Nullable<decimal> Discount { get; set; }
-        public string Notes { get; set; }
         public Nullable<long> InvoiceID { get; set; }
-        public Nullable<long> OfferID { get; set; }
-        public Nullable<int> BranchID { get; set; }
+        public Nullable<int> ExtraCostID { get; set; }
+        public Nullable<decimal> ExtraCostValue { get; set; }
     
-        public virtual Branch Branch { get; set; }
         public virtual Invoice Invoice { get; set; }
-        public virtual Item Item { get; set; }
-        public virtual Offer Offer { get; set; }
+        public virtual ExtraCost ExtraCost { get; set; }
     }
 }

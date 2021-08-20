@@ -7,5 +7,6 @@ namespace HurghadaMarketAPI.DTOs
         public string OfferName { get; set; }
         public decimal? OfferPrice { get; set; }
         public decimal? OrPrice { get; set; }
+        public string Pic { get; set; }
     }
 }
