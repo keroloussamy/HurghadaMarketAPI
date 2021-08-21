@@ -18,11 +18,12 @@ namespace HurghadaMarketAPI.Models
         public Invoice()
         {
             this.InvoiceItems = new HashSet<InvoiceItem>();
+            this.InvoiceBranchServeds = new HashSet<InvoiceBranchServed>();
             this.InvoiceExtraCosts = new HashSet<InvoiceExtraCost>();
         }
     
         public long ID { get; set; }
-        public Nullable<long> InvoiceCode { get; set; }
+        public string InvoiceCode { get; set; }
         public Nullable<long> CustomerID { get; set; }
         public Nullable<System.DateTime> RequestDate { get; set; }
         public Nullable<System.TimeSpan> RequestTime { get; set; }
@@ -31,13 +32,14 @@ namespace HurghadaMarketAPI.Models
         public Nullable<decimal> Tax { get; set; }
         public Nullable<long> UserLogID { get; set; }
         public string Notes { get; set; }
-        public Nullable<bool> Served { get; set; }
         public Nullable<bool> Carpet { get; set; }
         public string Address { get; set; }
     
         public virtual Customer Customer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<InvoiceItem> InvoiceItems { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<InvoiceBranchServed> InvoiceBranchServeds { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<InvoiceExtraCost> InvoiceExtraCosts { get; set; }
         public virtual UserLog UserLog { get; set; }

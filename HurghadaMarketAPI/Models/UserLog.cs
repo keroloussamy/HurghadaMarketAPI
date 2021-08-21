@@ -23,6 +23,7 @@ namespace HurghadaMarketAPI.Models
             this.Invoices = new HashSet<Invoice>();
             this.Items = new HashSet<Item>();
             this.Offers = new HashSet<Offer>();
+            this.InvoiceBranchServeds = new HashSet<InvoiceBranchServed>();
         }
     
         public long ID { get; set; }
@@ -43,5 +44,7 @@ namespace HurghadaMarketAPI.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Offer> Offers { get; set; }
         public virtual User User { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<InvoiceBranchServed> InvoiceBranchServeds { get; set; }
     }
 }

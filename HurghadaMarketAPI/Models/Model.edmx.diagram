@@ -4,28 +4,29 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="a5c8ea1574914780b4d58a41e0cad26b" Name="Diagram1" ZoomLevel="86">
-        <EntityTypeShape EntityType="HurghadaMarketModel.Branch" Width="1.5" PointX="3" PointY="19.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="HurghadaMarketModel.BranchCategory" Width="1.5" PointX="5.25" PointY="21.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="HurghadaMarketModel.BranchItem" Width="1.5" PointX="9.75" PointY="32.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="HurghadaMarketModel.BranchParticipation" Width="1.5" PointX="12.75" PointY="33.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="HurghadaMarketModel.Category" Width="1.5" PointX="0.75" PointY="21" IsExpanded="true" />
-        <EntityTypeShape EntityType="HurghadaMarketModel.Client" Width="1.5" PointX="3" PointY="27.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="HurghadaMarketModel.CustomerAddress" Width="1.5" PointX="5.25" PointY="12.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="HurghadaMarketModel.CustomerFeedback" Width="1.5" PointX="5.25" PointY="8.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="HurghadaMarketModel.Customer" Width="1.5" PointX="3" PointY="15.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="HurghadaMarketModel.InvoiceItem" Width="1.5" PointX="8.25" PointY="20.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="HurghadaMarketModel.Invoice" Width="1.5" PointX="9.75" PointY="45.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="HurghadaMarketModel.ItemEval" Width="1.5" PointX="12" PointY="29.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="HurghadaMarketModel.Item" Width="1.5" PointX="12.75" PointY="37.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="HurghadaMarketModel.Mail" Width="1.5" PointX="5.25" PointY="16.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="HurghadaMarketModel.MarketEvaluation" Width="1.5" PointX="5.25" PointY="25.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="HurghadaMarketModel.OfferItem" Width="1.5" PointX="15" PointY="38.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="HurghadaMarketModel.Offer" Width="1.5" PointX="9.75" PointY="37.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="HurghadaMarketModel.User" Width="1.5" PointX="5.25" PointY="46.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="HurghadaMarketModel.UserLog" Width="1.5" PointX="7.5" PointY="46.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="HurghadaMarketModel.ExtraCost" Width="1.5" PointX="5.25" PointY="50.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="HurghadaMarketModel.InvoiceExtraCost" Width="1.5" PointX="12" PointY="48.375" IsExpanded="true" />
+      <Diagram DiagramId="4626cec968a64091ab39ffcce7c7ac67" Name="Diagram1">
+        <EntityTypeShape EntityType="HurghadaMarketModel.Branch" Width="1.5" PointX="3" PointY="21.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HurghadaMarketModel.BranchCategory" Width="1.5" PointX="5.25" PointY="23.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HurghadaMarketModel.BranchItem" Width="1.5" PointX="9.75" PointY="34.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HurghadaMarketModel.BranchParticipation" Width="1.5" PointX="12.75" PointY="35" IsExpanded="true" />
+        <EntityTypeShape EntityType="HurghadaMarketModel.Category" Width="1.5" PointX="0.75" PointY="23" IsExpanded="true" />
+        <EntityTypeShape EntityType="HurghadaMarketModel.Client" Width="1.5" PointX="3" PointY="29.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HurghadaMarketModel.CustomerAddress" Width="1.5" PointX="5.25" PointY="14.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HurghadaMarketModel.CustomerFeedback" Width="1.5" PointX="5.25" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="HurghadaMarketModel.Customer" Width="1.5" PointX="3" PointY="17.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="HurghadaMarketModel.InvoiceItem" Width="1.5" PointX="8.25" PointY="22.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HurghadaMarketModel.Invoice" Width="1.5" PointX="9.75" PointY="48" IsExpanded="true" />
+        <EntityTypeShape EntityType="HurghadaMarketModel.ItemEval" Width="1.5" PointX="12" PointY="31.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HurghadaMarketModel.Item" Width="1.5" PointX="12.75" PointY="39.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HurghadaMarketModel.Mail" Width="1.5" PointX="5.25" PointY="18.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HurghadaMarketModel.MarketEvaluation" Width="1.5" PointX="5.25" PointY="27.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HurghadaMarketModel.OfferItem" Width="1.5" PointX="15" PointY="42.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="HurghadaMarketModel.Offer" Width="1.5" PointX="9.75" PointY="39.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HurghadaMarketModel.User" Width="1.5" PointX="5.25" PointY="48.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="HurghadaMarketModel.UserLog" Width="1.5" PointX="7.5" PointY="48.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HurghadaMarketModel.ExtraCost" Width="1.5" PointX="5.25" PointY="52.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="HurghadaMarketModel.InvoiceBranchServed" Width="1.5" PointX="15" PointY="38.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="HurghadaMarketModel.InvoiceExtraCost" Width="1.5" PointX="12" PointY="50.625" IsExpanded="true" />
         <AssociationConnector Association="HurghadaMarketModel.FK_Branch_Branch" ManuallyRouted="false" />
         <AssociationConnector Association="HurghadaMarketModel.FK_Branch_Category" ManuallyRouted="false" />
         <AssociationConnector Association="HurghadaMarketModel.FK_Branch_UserLog" ManuallyRouted="false" />
@@ -33,6 +34,7 @@
         <AssociationConnector Association="HurghadaMarketModel.FK_BranchItem_Branch" ManuallyRouted="false" />
         <AssociationConnector Association="HurghadaMarketModel.FK_BranchParticipation_Branch" ManuallyRouted="false" />
         <AssociationConnector Association="HurghadaMarketModel.FK_ExtraCost_Branch" ManuallyRouted="false" />
+        <AssociationConnector Association="HurghadaMarketModel.FK_InvoiceBranchServed_Branch" ManuallyRouted="false" />
         <AssociationConnector Association="HurghadaMarketModel.FK_InvoiceItem_Branch" ManuallyRouted="false" />
         <AssociationConnector Association="HurghadaMarketModel.FK_Mail_Branch" ManuallyRouted="false" />
         <AssociationConnector Association="HurghadaMarketModel.FK_MarketEvaluation_Branch" ManuallyRouted="false" />
@@ -52,6 +54,7 @@
         <AssociationConnector Association="HurghadaMarketModel.FK_InvoiceItem_Invoices" ManuallyRouted="false" />
         <AssociationConnector Association="HurghadaMarketModel.FK_InvoiceItem_Items" ManuallyRouted="false" />
         <AssociationConnector Association="HurghadaMarketModel.FK_InvoiceItem_Offers" ManuallyRouted="false" />
+        <AssociationConnector Association="HurghadaMarketModel.FK_InvoiceBranchServed_Invoices" ManuallyRouted="false" />
         <AssociationConnector Association="HurghadaMarketModel.FK_InvoiceExtraCost_Invoices" ManuallyRouted="false" />
         <AssociationConnector Association="HurghadaMarketModel.FK_Invoices_UserLog" ManuallyRouted="false" />
         <AssociationConnector Association="HurghadaMarketModel.FK_Items_UserLog" ManuallyRouted="false" />
@@ -59,6 +62,7 @@
         <AssociationConnector Association="HurghadaMarketModel.FK_OfferItems_Offers" ManuallyRouted="false" />
         <AssociationConnector Association="HurghadaMarketModel.FK_Offers_UserLog" ManuallyRouted="false" />
         <AssociationConnector Association="HurghadaMarketModel.FK_UserLog_User" ManuallyRouted="false" />
+        <AssociationConnector Association="HurghadaMarketModel.FK_InvoiceBranchServed_UserLog" ManuallyRouted="false" />
         <AssociationConnector Association="HurghadaMarketModel.FK_InvoiceExtraCost_ExtraCost" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="HurghadaMarketModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="HurghadaMarketModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Branch">
           <Key>
             <PropertyRef Name="ID" />
@@ -138,7 +138,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="InvoiceCode" Type="bigint" StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceCode" Type="nvarchar" MaxLength="50" />
           <Property Name="CustomerID" Type="bigint" />
           <Property Name="RequestDate" Type="date" />
           <Property Name="RequestTime" Type="time" Precision="7" />
@@ -259,6 +259,16 @@
           <Property Name="UserLogID" Type="bigint" />
           <Property Name="Status" Type="bit" />
           <Property Name="BranchID" Type="int" />
+        </EntityType>
+        <EntityType Name="InvoiceBranchServed">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InvoiceID" Type="bigint" />
+          <Property Name="Served" Type="bit" />
+          <Property Name="BranchID" Type="int" />
+          <Property Name="UserLogID" Type="bigint" />
         </EntityType>
         <EntityType Name="InvoiceExtraCost">
           <Key>
@@ -438,6 +448,42 @@
             </Principal>
             <Dependent Role="ExtraCost">
               <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvoiceBranchServed_Branch">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1" />
+          <End Role="InvoiceBranchServed" Type="Self.InvoiceBranchServed" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="InvoiceBranchServed">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvoiceBranchServed_Invoices">
+          <End Role="Invoices" Type="Self.Invoices" Multiplicity="0..1" />
+          <End Role="InvoiceBranchServed" Type="Self.InvoiceBranchServed" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Invoices">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="InvoiceBranchServed">
+              <PropertyRef Name="InvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvoiceBranchServed_UserLog">
+          <End Role="UserLog" Type="Self.UserLog" Multiplicity="0..1" />
+          <End Role="InvoiceBranchServed" Type="Self.InvoiceBranchServed" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserLog">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="InvoiceBranchServed">
+              <PropertyRef Name="UserLogID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -736,6 +782,7 @@
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserLog" EntityType="Self.UserLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ExtraCost" EntityType="Self.ExtraCost" Schema="ph18669459826" store:Type="Tables" />
+          <EntitySet Name="InvoiceBranchServed" EntityType="Self.InvoiceBranchServed" Schema="ph18669459826" store:Type="Tables" />
           <EntitySet Name="InvoiceExtraCost" EntityType="Self.InvoiceExtraCost" Schema="ph18669459826" store:Type="Tables" />
           <AssociationSet Name="FK_Branch_Branch" Association="Self.FK_Branch_Branch">
             <End Role="Branch" EntitySet="Branch" />
@@ -788,6 +835,18 @@
           <AssociationSet Name="FK_ExtraCost_Branch" Association="Self.FK_ExtraCost_Branch">
             <End Role="Branch" EntitySet="Branch" />
             <End Role="ExtraCost" EntitySet="ExtraCost" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvoiceBranchServed_Branch" Association="Self.FK_InvoiceBranchServed_Branch">
+            <End Role="Branch" EntitySet="Branch" />
+            <End Role="InvoiceBranchServed" EntitySet="InvoiceBranchServed" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvoiceBranchServed_Invoices" Association="Self.FK_InvoiceBranchServed_Invoices">
+            <End Role="Invoices" EntitySet="Invoices" />
+            <End Role="InvoiceBranchServed" EntitySet="InvoiceBranchServed" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvoiceBranchServed_UserLog" Association="Self.FK_InvoiceBranchServed_UserLog">
+            <End Role="UserLog" EntitySet="UserLog" />
+            <End Role="InvoiceBranchServed" EntitySet="InvoiceBranchServed" />
           </AssociationSet>
           <AssociationSet Name="FK_InvoiceExtraCost_ExtraCost" Association="Self.FK_InvoiceExtraCost_ExtraCost">
             <End Role="ExtraCost" EntitySet="ExtraCost" />
@@ -874,7 +933,8 @@
             <End Role="UserLog" EntitySet="UserLog" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="HurghadaMarketModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -906,6 +966,7 @@
           <NavigationProperty Name="BranchItems" Relationship="Self.FK_BranchItem_Branch" FromRole="Branch" ToRole="BranchItem" />
           <NavigationProperty Name="BranchParticipations" Relationship="Self.FK_BranchParticipation_Branch" FromRole="Branch" ToRole="BranchParticipation" />
           <NavigationProperty Name="ExtraCosts" Relationship="Self.FK_ExtraCost_Branch" FromRole="Branch" ToRole="ExtraCost" />
+          <NavigationProperty Name="InvoiceBranchServeds" Relationship="Self.FK_InvoiceBranchServed_Branch" FromRole="Branch" ToRole="InvoiceBranchServed" />
           <NavigationProperty Name="InvoiceItems" Relationship="Self.FK_InvoiceItem_Branch" FromRole="Branch" ToRole="InvoiceItem" />
           <NavigationProperty Name="Mails" Relationship="Self.FK_Mail_Branch" FromRole="Branch" ToRole="Mail" />
           <NavigationProperty Name="MarketEvaluations" Relationship="Self.FK_MarketEvaluation_Branch" FromRole="Branch" ToRole="MarketEvaluation" />
@@ -952,9 +1013,9 @@
           <Property Name="PayedValue" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="UserLogID" Type="Int64" />
           <Property Name="Status" Type="Boolean" />
+          <Property Name="Commision" Type="Boolean" />
           <NavigationProperty Name="Branch" Relationship="Self.FK_BranchParticipation_Branch" FromRole="BranchParticipation" ToRole="Branch" />
           <NavigationProperty Name="UserLog" Relationship="Self.FK_BranchParticipation_UserLog" FromRole="BranchParticipation" ToRole="UserLog" />
-          <Property Name="Commision" Type="Boolean" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -1045,8 +1106,8 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" />
-          <Property Name="InvoiceCode" Type="Int64" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CustomerID" Type="Int64" />
           <Property Name="RequestDate" Type="DateTime" Precision="0" />
           <Property Name="RequestTime" Type="Time" Precision="7" />
@@ -1055,11 +1116,11 @@
           <Property Name="Tax" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="UserLogID" Type="Int64" />
           <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Served" Type="Boolean" />
           <Property Name="Carpet" Type="Boolean" />
           <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Customer" Relationship="Self.FK_Invoices_Customers" FromRole="Invoices" ToRole="Customers" />
           <NavigationProperty Name="InvoiceItems" Relationship="Self.FK_InvoiceItem_Invoices" FromRole="Invoices" ToRole="InvoiceItem" />
+          <NavigationProperty Name="InvoiceBranchServeds" Relationship="Self.FK_InvoiceBranchServed_Invoices" FromRole="Invoices" ToRole="InvoiceBranchServed" />
           <NavigationProperty Name="InvoiceExtraCosts" Relationship="Self.FK_InvoiceExtraCost_Invoices" FromRole="Invoices" ToRole="InvoiceExtraCost" />
           <NavigationProperty Name="UserLog" Relationship="Self.FK_Invoices_UserLog" FromRole="Invoices" ToRole="UserLog" />
         </EntityType>
@@ -1185,6 +1246,7 @@
           <NavigationProperty Name="Items" Relationship="Self.FK_Items_UserLog" FromRole="UserLog" ToRole="Items" />
           <NavigationProperty Name="Offers" Relationship="Self.FK_Offers_UserLog" FromRole="UserLog" ToRole="Offers" />
           <NavigationProperty Name="User" Relationship="Self.FK_UserLog_User" FromRole="UserLog" ToRole="User" />
+          <NavigationProperty Name="InvoiceBranchServeds" Relationship="Self.FK_InvoiceBranchServed_UserLog" FromRole="UserLog" ToRole="InvoiceBranchServed" />
         </EntityType>
         <EntityType Name="ExtraCost">
           <Key>
@@ -1199,6 +1261,19 @@
           <Property Name="BranchID" Type="Int32" />
           <NavigationProperty Name="Branch" Relationship="Self.FK_ExtraCost_Branch" FromRole="ExtraCost" ToRole="Branch" />
           <NavigationProperty Name="InvoiceExtraCosts" Relationship="Self.FK_InvoiceExtraCost_ExtraCost" FromRole="ExtraCost" ToRole="InvoiceExtraCost" />
+        </EntityType>
+        <EntityType Name="InvoiceBranchServed">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceID" Type="Int64" />
+          <Property Name="Served" Type="Boolean" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="UserLogID" Type="Int64" />
+          <NavigationProperty Name="Branch" Relationship="Self.FK_InvoiceBranchServed_Branch" FromRole="InvoiceBranchServed" ToRole="Branch" />
+          <NavigationProperty Name="Invoice" Relationship="Self.FK_InvoiceBranchServed_Invoices" FromRole="InvoiceBranchServed" ToRole="Invoices" />
+          <NavigationProperty Name="UserLog" Relationship="Self.FK_InvoiceBranchServed_UserLog" FromRole="InvoiceBranchServed" ToRole="UserLog" />
         </EntityType>
         <EntityType Name="InvoiceExtraCost">
           <Key>
@@ -1299,6 +1374,18 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="ExtraCost">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_InvoiceBranchServed_Branch">
+          <End Role="Branch" Type="Self.Branch" Multiplicity="0..1" />
+          <End Role="InvoiceBranchServed" Type="Self.InvoiceBranchServed" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Branch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="InvoiceBranchServed">
               <PropertyRef Name="BranchID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1555,6 +1642,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_InvoiceBranchServed_Invoices">
+          <End Role="Invoices" Type="Self.Invoice" Multiplicity="0..1" />
+          <End Role="InvoiceBranchServed" Type="Self.InvoiceBranchServed" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Invoices">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="InvoiceBranchServed">
+              <PropertyRef Name="InvoiceID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_InvoiceExtraCost_Invoices">
           <End Role="Invoices" Type="Self.Invoice" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -1645,6 +1744,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_InvoiceBranchServed_UserLog">
+          <End Role="UserLog" Type="Self.UserLog" Multiplicity="0..1" />
+          <End Role="InvoiceBranchServed" Type="Self.InvoiceBranchServed" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserLog">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="InvoiceBranchServed">
+              <PropertyRef Name="UserLogID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_InvoiceExtraCost_ExtraCost">
           <End Role="ExtraCost" Type="Self.ExtraCost" Multiplicity="0..1" />
           <End Role="InvoiceExtraCost" Type="Self.InvoiceExtraCost" Multiplicity="*" />
@@ -1657,7 +1768,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="HurghadaMarketEntities1" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="HurghadaMarketEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Branches" EntityType="Self.Branch" />
           <EntitySet Name="BranchCategories" EntityType="Self.BranchCategory" />
           <EntitySet Name="BranchItems" EntityType="Self.BranchItem" />
@@ -1678,6 +1789,7 @@
           <EntitySet Name="Users" EntityType="Self.User" />
           <EntitySet Name="UserLogs" EntityType="Self.UserLog" />
           <EntitySet Name="ExtraCosts" EntityType="Self.ExtraCost" />
+          <EntitySet Name="InvoiceBranchServeds" EntityType="Self.InvoiceBranchServed" />
           <EntitySet Name="InvoiceExtraCosts" EntityType="Self.InvoiceExtraCost" />
           <AssociationSet Name="FK_Branch_Branch" Association="Self.FK_Branch_Branch">
             <End Role="Branch" EntitySet="Branches" />
@@ -1706,6 +1818,10 @@
           <AssociationSet Name="FK_ExtraCost_Branch" Association="Self.FK_ExtraCost_Branch">
             <End Role="Branch" EntitySet="Branches" />
             <End Role="ExtraCost" EntitySet="ExtraCosts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_InvoiceBranchServed_Branch" Association="Self.FK_InvoiceBranchServed_Branch">
+            <End Role="Branch" EntitySet="Branches" />
+            <End Role="InvoiceBranchServed" EntitySet="InvoiceBranchServeds" />
           </AssociationSet>
           <AssociationSet Name="FK_InvoiceItem_Branch" Association="Self.FK_InvoiceItem_Branch">
             <End Role="Branch" EntitySet="Branches" />
@@ -1783,6 +1899,10 @@
             <End Role="Offers" EntitySet="Offers" />
             <End Role="InvoiceItem" EntitySet="InvoiceItems" />
           </AssociationSet>
+          <AssociationSet Name="FK_InvoiceBranchServed_Invoices" Association="Self.FK_InvoiceBranchServed_Invoices">
+            <End Role="Invoices" EntitySet="Invoices" />
+            <End Role="InvoiceBranchServed" EntitySet="InvoiceBranchServeds" />
+          </AssociationSet>
           <AssociationSet Name="FK_InvoiceExtraCost_Invoices" Association="Self.FK_InvoiceExtraCost_Invoices">
             <End Role="Invoices" EntitySet="Invoices" />
             <End Role="InvoiceExtraCost" EntitySet="InvoiceExtraCosts" />
@@ -1811,6 +1931,10 @@
             <End Role="User" EntitySet="Users" />
             <End Role="UserLog" EntitySet="UserLogs" />
           </AssociationSet>
+          <AssociationSet Name="FK_InvoiceBranchServed_UserLog" Association="Self.FK_InvoiceBranchServed_UserLog">
+            <End Role="UserLog" EntitySet="UserLogs" />
+            <End Role="InvoiceBranchServed" EntitySet="InvoiceBranchServeds" />
+          </AssociationSet>
           <AssociationSet Name="FK_InvoiceExtraCost_ExtraCost" Association="Self.FK_InvoiceExtraCost_ExtraCost">
             <End Role="ExtraCost" EntitySet="ExtraCosts" />
             <End Role="InvoiceExtraCost" EntitySet="InvoiceExtraCosts" />
@@ -1821,7 +1945,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="HurghadaMarketModelStoreContainer" CdmEntityContainer="HurghadaMarketEntities1">
+        <EntityContainerMapping StorageEntityContainer="HurghadaMarketModelStoreContainer" CdmEntityContainer="HurghadaMarketEntities">
           <EntitySetMapping Name="Branches">
             <EntityTypeMapping TypeName="HurghadaMarketModel.Branch">
               <MappingFragment StoreEntitySet="Branch">
@@ -1872,7 +1996,6 @@
           <EntitySetMapping Name="BranchParticipations">
             <EntityTypeMapping TypeName="HurghadaMarketModel.BranchParticipation">
               <MappingFragment StoreEntitySet="BranchParticipation">
-                <ScalarProperty Name="Commision" ColumnName="Commision" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
@@ -1880,6 +2003,7 @@
                 <ScalarProperty Name="PayedValue" ColumnName="PayedValue" />
                 <ScalarProperty Name="UserLogID" ColumnName="UserLogID" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Commision" ColumnName="Commision" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2094,6 +2218,17 @@
                 <ScalarProperty Name="UserLogID" ColumnName="UserLogID" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InvoiceBranchServeds">
+            <EntityTypeMapping TypeName="HurghadaMarketModel.InvoiceBranchServed">
+              <MappingFragment StoreEntitySet="InvoiceBranchServed">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="InvoiceID" ColumnName="InvoiceID" />
+                <ScalarProperty Name="Served" ColumnName="Served" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="UserLogID" ColumnName="UserLogID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

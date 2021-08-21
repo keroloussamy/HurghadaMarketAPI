@@ -214,6 +214,9 @@
     <Compile Include="Models\Invoice.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\InvoiceBranchServed.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\InvoiceExtraCost.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>

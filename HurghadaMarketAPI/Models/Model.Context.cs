@@ -13,10 +13,10 @@ namespace HurghadaMarketAPI.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class HurghadaMarketEntities1 : DbContext
+    public partial class HurghadaMarketEntities : DbContext
     {
-        public HurghadaMarketEntities1()
-            : base("name=HurghadaMarketEntities1")
+        public HurghadaMarketEntities()
+            : base("name=HurghadaMarketEntities")
         {
         }
     
@@ -45,6 +45,7 @@ namespace HurghadaMarketAPI.Models
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserLog> UserLogs { get; set; }
         public virtual DbSet<ExtraCost> ExtraCosts { get; set; }
+        public virtual DbSet<InvoiceBranchServed> InvoiceBranchServeds { get; set; }
         public virtual DbSet<InvoiceExtraCost> InvoiceExtraCosts { get; set; }
     }
 }

@@ -20,7 +20,7 @@ namespace HurghadaMarketAPI.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class HomeController : ApiController
     {
-        private HurghadaMarketEntities1 _context = new HurghadaMarketEntities1();
+        private HurghadaMarketEntities _context = new HurghadaMarketEntities();
 
         // Register
         [HttpPost]
@@ -61,10 +61,12 @@ namespace HurghadaMarketAPI.Controllers
         {
             try
             {
+                var startDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time"));
+                var endDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time"));
+
                 var BrancheList = await _context.Branches.Where(x => x.BranchParticipations
-                .Where(bp => bp.StartDate <= TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")) &&
-                bp.EndDate >= TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time"))
-                && bp.Status == true).Count() > 0).Include(b => b.BranchParticipations).ToListAsync();
+                .Where(bp => bp.StartDate <= startDate && bp.EndDate >= endDate && bp.Status == true)
+                .Count() > 0).Include(b => b.BranchParticipations).ToListAsync();
 
                 List<BranchDTO> FilteredList = new List<BranchDTO>();
                 foreach (var item in BrancheList)
@@ -97,11 +99,10 @@ namespace HurghadaMarketAPI.Controllers
         {
             try
             {
-                var offersList = await _context.Offers.Where(
-                x => x.StartDate <= TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time"))
-                && x.EndDate >= TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time"))
-                && x.Status == true
-                && x.BranchID == BranchID).ToListAsync();
+                var startDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time"));
+                var endDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time"));
+
+                var offersList = await _context.Offers.Where(x => x.StartDate <= startDate && x.EndDate >= endDate && x.Status == true && x.BranchID == BranchID).ToListAsync();
 
                 List<OfferDTO> OfferDTOList = new List<OfferDTO>();
                 foreach (var item in offersList)
@@ -203,7 +204,7 @@ namespace HurghadaMarketAPI.Controllers
                     var newInvoice = new Invoice { CustomerID = CustomerID, 
                         RequestDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")), 
                         RequestTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")).TimeOfDay,
-                        //InvoiceCode = System.IO.Path.GetRandomFileName(),
+                        InvoiceCode = System.IO.Path.GetRandomFileName(),
                         Carpet = true };
                     _context.Invoices.Add(newInvoice);
                     await _context.SaveChangesAsync();
@@ -276,7 +277,7 @@ namespace HurghadaMarketAPI.Controllers
                     var newInvoice = new Invoice { CustomerID = CustomerID, 
                         RequestDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")),
                         RequestTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")).TimeOfDay,
-                        //InvoiceCode = System.IO.Path.GetRandomFileName(),
+                        InvoiceCode = System.IO.Path.GetRandomFileName(),
                         Carpet = true };
                     _context.Invoices.Add(newInvoice);
                     await _context.SaveChangesAsync();
@@ -422,7 +423,6 @@ namespace HurghadaMarketAPI.Controllers
                     invoice.Carpet = false;
                     invoice.RequestTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")).TimeOfDay;
                     invoice.RequestDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time"));
-                    invoice.Served = false;
                     invoice.TotalPrice = totalPrice;
                     _context.Entry(invoice).State = EntityState.Modified;
                     await _context.SaveChangesAsync();
