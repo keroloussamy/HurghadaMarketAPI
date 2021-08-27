@@ -14,18 +14,9 @@ namespace HurghadaMarketAPI.Models
     
     public partial class Client
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Client()
-        {
-            this.MarketEvaluations = new HashSet<MarketEvaluation>();
-        }
-    
-        public int ID { get; set; }
+        public long ID { get; set; }
         public string ClientName { get; set; }
         public string Phone { get; set; }
         public Nullable<bool> Status { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MarketEvaluation> MarketEvaluations { get; set; }
     }
 }

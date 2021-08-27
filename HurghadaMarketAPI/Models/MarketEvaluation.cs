@@ -17,10 +17,10 @@ namespace HurghadaMarketAPI.Models
         public long ID { get; set; }
         public Nullable<int> BranchID { get; set; }
         public Nullable<int> EvalDegree { get; set; }
-        public Nullable<int> ClientID { get; set; }
+        public Nullable<long> CustomerID { get; set; }
         public Nullable<System.DateTime> EvalDate { get; set; }
     
         public virtual Branch Branch { get; set; }
-        public virtual Client Client { get; set; }
+        public virtual Customer Customer { get; set; }
     }
 }

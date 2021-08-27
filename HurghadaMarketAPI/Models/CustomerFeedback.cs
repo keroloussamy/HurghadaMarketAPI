@@ -22,6 +22,7 @@ namespace HurghadaMarketAPI.Models
         public Nullable<bool> Approved { get; set; }
         public Nullable<bool> Status { get; set; }
         public Nullable<System.DateTime> CommentDate { get; set; }
+        public Nullable<double> EvalDegree { get; set; }
     
         public virtual Customer Customer { get; set; }
     }

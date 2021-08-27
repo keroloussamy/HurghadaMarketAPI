@@ -454,12 +454,12 @@ namespace HurghadaMarketAPI.Controllers
         
         [HttpGet]
         [Route("DeleteItemFromCarpet")]
-        public async Task<IHttpActionResult> DeleteItemFromCarpet(long ItemId, long CustomerID)
+        public async Task<IHttpActionResult> DeleteItemFromCarpet(long ItemId, long CustomerID)//ItemId is ItemId or OfferId
         {
             var invoiceID = await _context.Invoices.Where(x => x.CustomerID == CustomerID && x.Carpet == true).Select(x => x.ID).FirstOrDefaultAsync();
             if (invoiceID != 0)
             {
-                var invoiceItem = _context.InvoiceItems.Where(x => x.ItemID == ItemId).FirstOrDefault();
+                var invoiceItem = _context.InvoiceItems.Where(x => x.ItemID == ItemId || x.OfferID == ItemId).FirstOrDefault();
                 if (invoiceItem == null)
                 { return NotFound(); }
 
@@ -496,23 +496,29 @@ namespace HurghadaMarketAPI.Controllers
         }
 
         [HttpGet]
-        [Route("SetMarketEvaluation")]
-        public async Task<IHttpActionResult> SetMarketEvaluation(int BranchID, int EvalDegree, int ClientID)
+        [Route("SetFeedback")]
+        public async Task<IHttpActionResult> SetFeedback(int BranchID, double EvalDegree, int CustomerID, string Comment)
         {
             try
             {
                 var BranchId = _context.Branches.Where(x => x.ID == BranchID).Select(x => x.ID).FirstOrDefault();
                 if (BranchId == 0) { return BadRequest("This Branch Is Not Exist."); }
-                var ClientId = _context.Clients.Where(x => x.ID == ClientID).Select(x => x.ID).FirstOrDefault();
-                if (ClientId == 0) { return BadRequest("This Client Is Not Exist."); }
-                var newMarketEvaluation = new MarketEvaluation
+                var CustomerId = _context.Customers.Where(x => x.ID == CustomerID).Select(x => x.ID).FirstOrDefault();
+                if (CustomerId == 0) { return BadRequest("This Client Is Not Exist."); }
+
+                var newCustomerFeedback = new CustomerFeedback
                 {
-                    BranchID = BranchID,
-                    ClientID = ClientID,
+                    TableName = "Branch",
+                    TableID = BranchID,
+                    Approved = true,
+                    Comment = Comment,
                     EvalDegree = EvalDegree,
-                    EvalDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time"))
+                    CommentDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")),
+                    CustomerID = CustomerID,
+                    Status = true
                 };
-                _context.MarketEvaluations.Add(newMarketEvaluation);
+                _context.CustomerFeedbacks.Add(newCustomerFeedback);
+
                 await _context.SaveChangesAsync();
                 return Ok("Evaluation Added Successfully");
             }
@@ -524,42 +530,22 @@ namespace HurghadaMarketAPI.Controllers
 
 
         [HttpGet]
-        [Route("SetCustomerFeedback")]
-        public async Task<IHttpActionResult> SetCustomerFeedback(int BranchID, long CustomerID, string Comment)
+        [Route("GetFeedback")]
+        public  IHttpActionResult GetFeedback(int BranchID)
         {
-            try
+            var BranchId = _context.Branches.Where(x => x.ID == BranchID).Select(x => x.ID).FirstOrDefault();
+            if (BranchId == 0) { return BadRequest("This Branch Is Not Exist."); }
+            var feedbackList = _context.CustomerFeedbacks.Where(x => x.TableID == BranchID).Select(x => new { x.Customer.CustomerName, x.EvalDegree, x.Comment, x.CommentDate}).OrderBy(x=>x.CommentDate).ToList();
+            if(feedbackList.Count > 0)
             {
-                var CusId = _context.Customers.FirstOrDefault(x => x.ID == CustomerID && x.Status == true);
-                if (CusId == null) { return BadRequest("This Customer Is Not Exist."); }
-
-                var BraId = _context.Branches.FirstOrDefault(x => x.ID == BranchID && x.Status == true);
-                if (BraId == null) { return BadRequest("This Branch Is Not Exist."); }
-
-                if (Comment != null)
-                {
-                    var newCustomerFeedback = new CustomerFeedback
-                    {
-                        TableName = "Branch",
-                        TableID = BranchID,
-                        Approved = true,
-                        Comment = Comment,
-                        CommentDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")),
-                        CustomerID = CustomerID,
-                        Status = true
-                    };
-                    _context.CustomerFeedbacks.Add(newCustomerFeedback);
-                    await _context.SaveChangesAsync();
-                    return Ok("Feedback Added Successfully");
-                }
-                else { return BadRequest("Please Add A Comment."); }
+                return Ok(feedbackList);
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-
+            else { return Ok("There's No Feedback For This Branch."); }
         }
-        
+
+
+
+
         private List<ExtraCostDTO> GetExtraCostsList(string Language, long invoiceID)
         {
 

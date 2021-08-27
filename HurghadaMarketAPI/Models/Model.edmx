@@ -79,7 +79,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ClientName" Type="nvarchar" MaxLength="500" />
           <Property Name="Phone" Type="nvarchar" MaxLength="500" />
           <Property Name="Status" Type="bit" />
@@ -108,6 +108,7 @@
           <Property Name="Approved" Type="bit" />
           <Property Name="Status" Type="bit" />
           <Property Name="CommentDate" Type="datetime" />
+          <Property Name="EvalDegree" Type="float" />
         </EntityType>
         <EntityType Name="Customers">
           <Key>
@@ -196,7 +197,7 @@
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="BranchID" Type="int" />
           <Property Name="EvalDegree" Type="int" />
-          <Property Name="ClientID" Type="int" />
+          <Property Name="CustomerID" Type="bigint" />
           <Property Name="EvalDate" Type="date" />
         </EntityType>
         <EntityType Name="OfferItems">
@@ -671,15 +672,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_MarketEvaluation_Client">
-          <End Role="Client" Type="Self.Client" Multiplicity="0..1" />
+        <Association Name="FK_MarketEvaluation_Customer">
+          <End Role="Customers" Type="Self.Customers" Multiplicity="0..1" />
           <End Role="MarketEvaluation" Type="Self.MarketEvaluation" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Client">
+            <Principal Role="Customers">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="MarketEvaluation">
-              <PropertyRef Name="ClientID" />
+              <PropertyRef Name="CustomerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -904,8 +905,8 @@
             <End Role="Branch" EntitySet="Branch" />
             <End Role="MarketEvaluation" EntitySet="MarketEvaluation" />
           </AssociationSet>
-          <AssociationSet Name="FK_MarketEvaluation_Client" Association="Self.FK_MarketEvaluation_Client">
-            <End Role="Client" EntitySet="Client" />
+          <AssociationSet Name="FK_MarketEvaluation_Customer" Association="Self.FK_MarketEvaluation_Customer">
+            <End Role="Customers" EntitySet="Customers" />
             <End Role="MarketEvaluation" EntitySet="MarketEvaluation" />
           </AssociationSet>
           <AssociationSet Name="FK_OfferItems_Items" Association="Self.FK_OfferItems_Items">
@@ -1037,11 +1038,10 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ClientName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Phone" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Boolean" />
-          <NavigationProperty Name="MarketEvaluations" Relationship="Self.FK_MarketEvaluation_Client" FromRole="Client" ToRole="MarketEvaluation" />
         </EntityType>
         <EntityType Name="CustomerAddress">
           <Key>
@@ -1068,6 +1068,7 @@
           <Property Name="Approved" Type="Boolean" />
           <Property Name="Status" Type="Boolean" />
           <Property Name="CommentDate" Type="DateTime" Precision="3" />
+          <Property Name="EvalDegree" Type="Double" />
           <NavigationProperty Name="Customer" Relationship="Self.FK_CustomerFeedback_Customers" FromRole="CustomerFeedback" ToRole="Customers" />
         </EntityType>
         <EntityType Name="Customer">
@@ -1083,6 +1084,7 @@
           <NavigationProperty Name="CustomerFeedbacks" Relationship="Self.FK_CustomerFeedback_Customers" FromRole="Customers" ToRole="CustomerFeedback" />
           <NavigationProperty Name="Invoices" Relationship="Self.FK_Invoices_Customers" FromRole="Customers" ToRole="Invoices" />
           <NavigationProperty Name="Mails" Relationship="Self.FK_Mail_Customers" FromRole="Customers" ToRole="Mail" />
+          <NavigationProperty Name="MarketEvaluations" Relationship="Self.FK_MarketEvaluation_Customer" FromRole="Customers" ToRole="MarketEvaluation" />
         </EntityType>
         <EntityType Name="InvoiceItem">
           <Key>
@@ -1178,10 +1180,10 @@
           <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="BranchID" Type="Int32" />
           <Property Name="EvalDegree" Type="Int32" />
-          <Property Name="ClientID" Type="Int32" />
+          <Property Name="CustomerID" Type="Int64" />
           <Property Name="EvalDate" Type="DateTime" Precision="0" />
           <NavigationProperty Name="Branch" Relationship="Self.FK_MarketEvaluation_Branch" FromRole="MarketEvaluation" ToRole="Branch" />
-          <NavigationProperty Name="Client" Relationship="Self.FK_MarketEvaluation_Client" FromRole="MarketEvaluation" ToRole="Client" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_MarketEvaluation_Customer" FromRole="MarketEvaluation" ToRole="Customers" />
         </EntityType>
         <EntityType Name="OfferItem">
           <Key>
@@ -1536,18 +1538,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_MarketEvaluation_Client">
-          <End Role="Client" Type="Self.Client" Multiplicity="0..1" />
-          <End Role="MarketEvaluation" Type="Self.MarketEvaluation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Client">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="MarketEvaluation">
-              <PropertyRef Name="ClientID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_CustomerAddress_Customers">
           <End Role="Customers" Type="Self.Customer" Multiplicity="0..1">
             <OnDelete Action="Cascade" />
@@ -1596,6 +1586,18 @@
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Mail">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MarketEvaluation_Customer">
+          <End Role="Customers" Type="Self.Customer" Multiplicity="0..1" />
+          <End Role="MarketEvaluation" Type="Self.MarketEvaluation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customers">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MarketEvaluation">
               <PropertyRef Name="CustomerID" />
             </Dependent>
           </ReferentialConstraint>
@@ -1867,10 +1869,6 @@
             <End Role="Category" EntitySet="Categories" />
             <End Role="Items" EntitySet="Items" />
           </AssociationSet>
-          <AssociationSet Name="FK_MarketEvaluation_Client" Association="Self.FK_MarketEvaluation_Client">
-            <End Role="Client" EntitySet="Clients" />
-            <End Role="MarketEvaluation" EntitySet="MarketEvaluations" />
-          </AssociationSet>
           <AssociationSet Name="FK_CustomerAddress_Customers" Association="Self.FK_CustomerAddress_Customers">
             <End Role="Customers" EntitySet="Customers" />
             <End Role="CustomerAddress" EntitySet="CustomerAddresses" />
@@ -1886,6 +1884,10 @@
           <AssociationSet Name="FK_Mail_Customers" Association="Self.FK_Mail_Customers">
             <End Role="Customers" EntitySet="Customers" />
             <End Role="Mail" EntitySet="Mails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MarketEvaluation_Customer" Association="Self.FK_MarketEvaluation_Customer">
+            <End Role="Customers" EntitySet="Customers" />
+            <End Role="MarketEvaluation" EntitySet="MarketEvaluations" />
           </AssociationSet>
           <AssociationSet Name="FK_InvoiceItem_Invoices" Association="Self.FK_InvoiceItem_Invoices">
             <End Role="Invoices" EntitySet="Invoices" />
@@ -2055,6 +2057,7 @@
                 <ScalarProperty Name="Approved" ColumnName="Approved" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="CommentDate" ColumnName="CommentDate" />
+                <ScalarProperty Name="EvalDegree" ColumnName="EvalDegree" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2150,7 +2153,7 @@
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="BranchID" ColumnName="BranchID" />
                 <ScalarProperty Name="EvalDegree" ColumnName="EvalDegree" />
-                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
                 <ScalarProperty Name="EvalDate" ColumnName="EvalDate" />
               </MappingFragment>
             </EntityTypeMapping>
