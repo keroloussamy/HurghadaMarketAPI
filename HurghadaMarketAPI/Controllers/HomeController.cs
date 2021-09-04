@@ -133,7 +133,7 @@ namespace HurghadaMarketAPI.Controllers
         {
             try
             {
-                var categoryIDs = await _context.BranchCategories.Where(x => x.BranchID == BranchID && x.Status == true)
+                var categoryIDs = await _context.BranchCategories.Where(x => x.BranchID == BranchID && x.Status == true && x.Category.Status ==true)
                 .OrderBy(x => x.OrderID).Select(x => x.CategoryID).ToListAsync();
 
                 List<CategoryDTO> categoryDTOs = new List<CategoryDTO>();
