@@ -411,7 +411,7 @@ namespace HurghadaMarketAPI.Controllers
         
         [HttpGet]
         [Route("CarpetConfirmed")]
-        public async Task<IHttpActionResult> CarpetConfirmed(long CustomerID, decimal totalPrice)
+        public async Task<IHttpActionResult> CarpetConfirmed(long CustomerID, decimal totalPrice, string notes)
         {
             try
             {
@@ -420,6 +420,7 @@ namespace HurghadaMarketAPI.Controllers
                 var invoice = await _context.Invoices.FirstOrDefaultAsync(x => x.CustomerID == CustomerID && x.Carpet == true);
                 if (invoice != null)
                 {
+                    //invoice.Notes = notes;
                     invoice.Carpet = false;
                     invoice.RequestTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")).TimeOfDay;
                     invoice.RequestDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time"));
@@ -535,7 +536,7 @@ namespace HurghadaMarketAPI.Controllers
         {
             var BranchId = _context.Branches.Where(x => x.ID == BranchID).Select(x => x.ID).FirstOrDefault();
             if (BranchId == 0) { return BadRequest("This Branch Is Not Exist."); }
-            var feedbackList = _context.CustomerFeedbacks.Where(x => x.TableID == BranchID).Select(x => new { x.Customer.CustomerName, x.EvalDegree, x.Comment, x.CommentDate}).OrderBy(x=>x.CommentDate).ToList();
+            var feedbackList = _context.CustomerFeedbacks.Where(x => x.TableID == BranchID).Select(x => new { x.Customer.CustomerName, x.EvalDegree, x.Comment, CommentDate = x.CommentDate.ToString() }).OrderByDescending(x=>x.CommentDate).ToList();
             if(feedbackList.Count > 0)
             {
                 return Ok(feedbackList);
