@@ -53,8 +53,6 @@ namespace HurghadaMarketAPI.Controllers
         }
 
         // 1+ Branches’ Page ------------------------------------------------------------
-        //http://localhost:60785/GetBranches?language=ar
-        //http://localhost:60785/GetBranches
         [Route("GetBranches")]
         [HttpGet]
         public async Task<IHttpActionResult> GetBranches(string language = "en")
@@ -92,7 +90,6 @@ namespace HurghadaMarketAPI.Controllers
 
 
         // 2 + Categories ------------------------------------------------------------
-        //http://localhost:60785/GetOffers?BranchID=1&language=ar
         [HttpGet]
         [Route("GetOffers")]
         public async Task<IHttpActionResult> GetOffers(long BranchID, string language = "en")
@@ -126,7 +123,6 @@ namespace HurghadaMarketAPI.Controllers
 
         }
 
-        //http://localhost:60785/GetCategories?BranchID=1&language=ar
         [HttpGet]
         [Route("GetCategories")]
         public async Task<IHttpActionResult> GetCategories(long BranchID, string Language = "en")
@@ -162,8 +158,8 @@ namespace HurghadaMarketAPI.Controllers
 
 
 
+
         // 3+ Items under categoies ------------------------------------------------------------
-        //http://localhost:60785/GetOfferItems?CategoryID=1&BranchID=1&language=ar
         [HttpGet]
         [Route("GetBranchItems")]
         public async Task<IHttpActionResult> GetBranchItems(string Language, long CategoryID, long BranchID)
@@ -191,7 +187,7 @@ namespace HurghadaMarketAPI.Controllers
 
         }
 
-        //http://localhost:60785/AddItemToCarpet?CustomerID=1&ID=1&Price=20&Quantity=2
+
         [HttpGet]
         [Route("AddItemToCarpet")]
         public async Task<IHttpActionResult> AddItemToCarpet(long CustomerID, long ID, decimal Price, decimal Quantity, Int32 BranchID) //ID = itemID, Check for BranchID == 0 when the item will updated not added.
@@ -201,10 +197,18 @@ namespace HurghadaMarketAPI.Controllers
                 var invoiceID = await _context.Invoices.Where(x => x.CustomerID == CustomerID && x.Carpet == true).Select(x => x.ID).FirstOrDefaultAsync();
                 if (invoiceID == 0) //long default   //No Carpet
                 {
+                    Retry:
+                    Random newR = new Random();
+                    string RandomeCode = newR.Next().ToString();
+                    var invoiceCode = await _context.Invoices.Where(x => x.InvoiceCode == RandomeCode).FirstOrDefaultAsync();
+                    if(invoiceCode != null)
+                    {
+                        goto Retry;
+                    }
                     var newInvoice = new Invoice { CustomerID = CustomerID, 
                         RequestDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")), 
                         RequestTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")).TimeOfDay,
-                        InvoiceCode = System.IO.Path.GetRandomFileName(),
+                        InvoiceCode = RandomeCode,
                         Carpet = true };
                     _context.Invoices.Add(newInvoice);
                     await _context.SaveChangesAsync();
@@ -235,7 +239,6 @@ namespace HurghadaMarketAPI.Controllers
 
 
         // 4+ Offer’s Page ------------------------------------------------------------
-        //http://localhost:60785/GetOfferItems?OfferID=1&language=ar
         [HttpGet]
         [Route("GetOfferItems")]
         public async Task<IHttpActionResult> GetOfferItems(string Language, long OfferID)
@@ -264,7 +267,7 @@ namespace HurghadaMarketAPI.Controllers
 
         }
 
-        //http://localhost:60785/AddOfferToCarpet?CustomerID=1&ID=1&Price=20&Quantity=2
+
         [HttpGet]
         [Route("AddOfferToCarpet")]
         public async Task<IHttpActionResult> AddOfferToCarpet(long CustomerID, long ID, decimal Price, decimal Quantity, Int32 BranchID) //ID = offerID, Check for BranchID == 0 when the item will updated not added.
@@ -311,7 +314,6 @@ namespace HurghadaMarketAPI.Controllers
 
 
         // 5+ Carpet’s Page ------------------------------------------------------------
-        //http://localhost:60785/CarpetItems?CustomerID=1&language=ar
         [HttpGet]
         [Route("CarpetItems")]
         public async Task<IHttpActionResult> CarpetItems(string Language, long CustomerID)
@@ -336,7 +338,7 @@ namespace HurghadaMarketAPI.Controllers
                             if (item.Item.Status == true) { status = true; }
                             if (Language == "ar") { name = item.Item.ItemNameAr; }
                             else { name = item.Item.ItemNameEn; }
-                            var realPrice = _context.BranchItems.Where(x => x.ItemID == item.ItemID).Select(x => x.Price).FirstOrDefault();
+                            var realPrice = _context.BranchItems.Where(x => x.ItemID == item.ItemID && x.BranchID == item.BranchID && x.Status == true && x.Item.Category.Status == true).Select(x => x.Price).FirstOrDefault();
                             if (item.Price != realPrice) { priceUpdated = true; }
 
                             var carpetItemsDTO = new CarpetItemsDTO
@@ -420,7 +422,7 @@ namespace HurghadaMarketAPI.Controllers
                 var invoice = await _context.Invoices.FirstOrDefaultAsync(x => x.CustomerID == CustomerID && x.Carpet == true);
                 if (invoice != null)
                 {
-                    //invoice.Notes = notes;
+                    invoice.Notes = notes;
                     invoice.Carpet = false;
                     invoice.RequestTime = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time")).TimeOfDay;
                     invoice.RequestDate = TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Egypt Standard Time"));
@@ -455,7 +457,7 @@ namespace HurghadaMarketAPI.Controllers
         
         [HttpGet]
         [Route("DeleteItemFromCarpet")]
-        public async Task<IHttpActionResult> DeleteItemFromCarpet(long ItemId, long CustomerID)//ItemId is ItemId or OfferId
+        public async Task<IHttpActionResult> DeleteItemFromCarpet(long ItemId, long CustomerID)//ItemId: is ItemId or OfferId
         {
             var invoiceID = await _context.Invoices.Where(x => x.CustomerID == CustomerID && x.Carpet == true).Select(x => x.ID).FirstOrDefaultAsync();
             if (invoiceID != 0)
@@ -498,7 +500,7 @@ namespace HurghadaMarketAPI.Controllers
 
         [HttpGet]
         [Route("SetFeedback")]
-        public async Task<IHttpActionResult> SetFeedback(int BranchID, double EvalDegree, int CustomerID, string Comment)
+        public async Task<IHttpActionResult> SetFeedback(int BranchID, double EvalDegree, int CustomerID, string Comment, string TableName)
         {
             try
             {
@@ -509,7 +511,7 @@ namespace HurghadaMarketAPI.Controllers
 
                 var newCustomerFeedback = new CustomerFeedback
                 {
-                    TableName = "Branch",
+                    TableName = TableName,
                     TableID = BranchID,
                     Approved = true,
                     Comment = Comment,
@@ -554,9 +556,25 @@ namespace HurghadaMarketAPI.Controllers
             if (BranchIDs != null)
             {
                 var extraCostsDTOList = new List<ExtraCostDTO>();
+                var extraCostList = _context.ExtraCosts.Where(x => x.BranchID == null && x.Status == true).ToList();
+                if (extraCostList != null)
+                {
+                    foreach (var extraCost in extraCostList)
+                    {
+                        extraCostsDTOList.Add(new ExtraCostDTO
+                        {
+                            BranchName = "", //Language == "ar" ? extraCost.Branch.BranchNameAr : extraCost.Branch.BranchNameEn,
+                            ExtraTitle = Language == "ar" ? extraCost.ExtraTitleAr : extraCost.ExtraTitleEn,
+                            ExtraValue = extraCost.ExtraValue,
+                            ID = extraCost.ID
+                        });
+                    }
+
+                }
+                
                 foreach (var branchID in BranchIDs)
                 {
-                    var extraCostList = _context.ExtraCosts.Where(x => x.BranchID == branchID && x.Status == true).ToList();
+                    extraCostList = _context.ExtraCosts.Where(x => x.BranchID == branchID && x.Status == true).ToList();
                     if (extraCostList != null)
                     {
                         foreach (var extraCost in extraCostList)
