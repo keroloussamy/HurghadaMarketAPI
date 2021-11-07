@@ -462,7 +462,7 @@ namespace HurghadaMarketAPI.Controllers
             var invoiceID = await _context.Invoices.Where(x => x.CustomerID == CustomerID && x.Carpet == true).Select(x => x.ID).FirstOrDefaultAsync();
             if (invoiceID != 0)
             {
-                var invoiceItem = _context.InvoiceItems.Where(x => x.ItemID == ItemId || x.OfferID == ItemId).FirstOrDefault();
+                var invoiceItem = _context.InvoiceItems.Where( x => x.InvoiceID == invoiceID && (x.ItemID == ItemId || x.OfferID == ItemId)).FirstOrDefault();
                 if (invoiceItem == null)
                 { return NotFound(); }
 
