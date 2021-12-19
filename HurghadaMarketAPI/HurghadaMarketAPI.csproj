@@ -171,12 +171,15 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DTOs\BranchDTO.cs" />
     <Compile Include="DTOs\BranchItemDTO.cs" />
+    <Compile Include="DTOs\OrderHistoryBranchItemDTO.cs" />
     <Compile Include="DTOs\CarpetItemsDTO.cs" />
     <Compile Include="DTOs\CategoryDTO.cs" />
     <Compile Include="DTOs\ExtraCostDTO.cs" />
     <Compile Include="DTOs\JsonResult.cs" />
     <Compile Include="DTOs\OfferDTO.cs" />
     <Compile Include="DTOs\OfferItemDTO.cs" />
+    <Compile Include="DTOs\OrderHistoeryDTO.cs" />
+    <Compile Include="DTOs\OrderHistoryBranchDTO.cs" />
     <Compile Include="DTOs\PostCustomerDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

@@ -410,7 +410,73 @@ namespace HurghadaMarketAPI.Controllers
             }
 
         }
-        
+
+        [HttpGet]
+        [Route("GetOrderHistoery")]
+        public async Task<IHttpActionResult> OrderHistoery(string Language, long CustomerID)
+        {
+            var result = new JsonResult<OrderHistoeryDTO>();
+            try
+            {
+                var OrderHistoeryList = new List<OrderHistoeryDTO>();
+                var invoices = await _context.Invoices.Where(x => x.CustomerID == CustomerID && x.Carpet == false).OrderByDescending(x=>x.RequestDate).ToListAsync();
+                if (invoices.Count != 0)
+                {
+                    for (int i = 0; i < invoices.Count; i++)
+                    {
+                        var order = new OrderHistoeryDTO()
+                        {
+                            Date = invoices[i].RequestDate.Value.ToString("dd/MM/yyyy"),
+                            Time = invoices[i].RequestTime.Value.Hours.ToString() + ":" + invoices[i].RequestTime.Value.Minutes.ToString(),
+                            OrderHistoryBranchs = new List<OrderHistoryBranchDTO>()
+                        };
+                        var invoiceID = invoices[i].ID;
+                        var list = _context.InvoiceItems.Where(x => x.InvoiceID == invoiceID).Select(x => x.BranchID).Distinct().ToList();
+
+                        for (int j = 0; j < list.Count; j++)
+                        {
+                            var branID = list[j];
+                            var status = _context.InvoiceBranchServeds.FirstOrDefault(x => x.InvoiceID == invoiceID && x.BranchID == branID)?.Served;
+                            // For Items
+                            var branshData = _context.InvoiceItems.Where(x => x.InvoiceID == invoiceID && x.BranchID == branID && x.ItemID != null).GroupBy(x => Language == "ar"? x.Branch.BranchNameAr : x.Branch.BranchNameEn)
+                            .Select(o => new OrderHistoryBranchDTO
+                            {
+                                BranchName = o.Key,
+                                OrderHistoryBranchItems = o.Select(x => new OrderHistoryBranchItemDTO { ItemName = Language == "ar" ? x.Item.ItemNameAr : x.Item.ItemNameEn, Quantity = x.Quantity, Price = x.Price, Total = x.Quantity * x.Price }).ToList(),
+                                Status = status.HasValue && status.Value ? "Served" : "OnGoing"
+                            }).ToList();
+                            order.OrderHistoryBranchs = order.OrderHistoryBranchs.Concat(branshData).ToList();
+
+                            //For Offers
+                            branshData = _context.InvoiceItems.Where(x => x.InvoiceID == invoiceID && x.BranchID == branID && x.OfferID != null).GroupBy(x => Language == "ar" ? x.Branch.BranchNameAr : x.Branch.BranchNameEn)
+                           .Select(o => new OrderHistoryBranchDTO
+                           {
+                               BranchName = o.Key,
+                               OrderHistoryBranchItems = o.Select(x => new OrderHistoryBranchItemDTO { ItemName = Language == "ar" ? x.Offer.OfferNameAr : x.Offer.OfferNameEn, Quantity = x.Quantity, Price = x.Price, Total = x.Quantity * x.Price }).ToList(),
+                               Status = status.HasValue && status.Value ? "Served" : "OnGoing"
+                           }).ToList();
+                            order.OrderHistoryBranchs = order.OrderHistoryBranchs.Concat(branshData).ToList();
+                        }
+
+                        OrderHistoeryList.Add(order);
+                    }
+                    result.Result = OrderHistoeryList;
+                    result.Message = "Items Returned Successfully";
+                    return Ok(result);
+                }
+                else
+                {
+                    return Ok("You don't have any privuos orders");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
         [HttpGet]
         [Route("CarpetConfirmed")]
         public async Task<IHttpActionResult> CarpetConfirmed(long CustomerID, decimal totalPrice, string notes)
@@ -457,12 +523,22 @@ namespace HurghadaMarketAPI.Controllers
         
         [HttpGet]
         [Route("DeleteItemFromCarpet")]
-        public async Task<IHttpActionResult> DeleteItemFromCarpet(long ItemId, long CustomerID)//ItemId: is ItemId or OfferId
+        public async Task<IHttpActionResult> DeleteItemFromCarpet(long ItemId, long CustomerID, string ItemType = "")//ItemId: is ItemId or OfferId
         {
             var invoiceID = await _context.Invoices.Where(x => x.CustomerID == CustomerID && x.Carpet == true).Select(x => x.ID).FirstOrDefaultAsync();
             if (invoiceID != 0)
             {
-                var invoiceItem = _context.InvoiceItems.Where( x => x.InvoiceID == invoiceID && x.ItemID == ItemId).FirstOrDefault();
+                InvoiceItem invoiceItem = null;
+
+                if (ItemType == "OfferID")
+                {
+                    invoiceItem = _context.InvoiceItems.Where(x => x.InvoiceID == invoiceID && x.OfferID == ItemId).FirstOrDefault();
+                }
+                else
+                {
+                    invoiceItem = _context.InvoiceItems.Where(x => x.InvoiceID == invoiceID && x.ItemID == ItemId).FirstOrDefault();
+                }
+                
                 if (invoiceItem == null)
                 { return NotFound(); }
 
